@@ -1,0 +1,51 @@
+{
+  "name": "joker",
+  "version": "1.0.0",
+  "description": "joker plays",
+  "main": "main.js",
+  "scripts": {
+    "build": "webpack --progress --colors",
+    "watch": "webpack --progress --colors --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Princess310/joker.git"
+  },
+  "keywords": [
+    "joker"
+  ],
+  "author": "'wangh'",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Princess310/joker/issues"
+  },
+  "homepage": "https://github.com/Princess310/joker#readme",
+  "babel": {
+    "presets": [
+      "latest",
+      "stage-0",
+      "react"
+    ]
+  },
+  "dependencies": {
+    "material-ui": "^0.16.0",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "react-router": "^2.8.1",
+    "react-tap-event-plugin": "^1.0.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.17.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-latest": "^6.16.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "css-loader": "^0.25.0",
+    "file-loader": "^0.9.0",
+    "less": "^2.7.1",
+    "less-loader": "^2.2.3",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.13.2"
+  }
+}

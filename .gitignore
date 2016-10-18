@@ -25,3 +25,9 @@ templates.js
 # Ignore Intellij files
 *.sublime-project
 *.sublime-workspace
+
+#node modules
+src/main/webapp/node_modules/
+
+#output folder
+src/main/webapp/dist/

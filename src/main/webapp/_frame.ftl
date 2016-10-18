@@ -2,28 +2,17 @@
 [#if piStarts("/admin")]
 [@includeFrameContent /]
 [#-- if we have a user in the request, we display the application --]
-[#elseif _r.user??]
+[#else]
 <!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Joker</title>
-	<!--
-	<link rel="stylesheet" href="${_r.contextPath}/bootstrap/css/bootstrap-theme.min.css" type="text/css" />
-	-->
-
-	[@webBundle path="/js/" type="js" /]
-
-	[@webBundle path="/css/" type="css" /]
-
+	<script async src="${_r.contextPath}/dist/app.js"></script>
 </head>
 
 <body>
 	[@includeFrameContent /]
 </body>
-
 </html>
-[#-- if no user, we include the loginpage --]
-[#else]
-[@includeTemplate name="loginpage.ftl"/] 
 [/#if]

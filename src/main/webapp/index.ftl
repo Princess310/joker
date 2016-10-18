@@ -1,3 +1,1 @@
-<script type="text/javascript">
-	console.log("in index");
-</script>
+<div id="app"></div>
