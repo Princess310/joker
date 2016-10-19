@@ -6,7 +6,8 @@ module.exports = {
 			app: './app.js'
 		},
 		output: {
-			path: './dist',
+			path: './dist/',
+			publicPath: "./dist/",
 			filename: '[name].js'
 		},
 		plugins: [
