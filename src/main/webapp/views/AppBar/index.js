@@ -36,9 +36,11 @@ Logged.muiName = 'IconMenu';
 
 class AppBarMenu extends Component {
 	state = {
-		logged: true,
+		logged: (user !== null && user.id),
 	};
+
 	render() {
+		console.log("state", this.state.logged);
 		return (
 			<AppBar
 				title="Joker" 
