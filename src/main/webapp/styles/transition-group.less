@@ -1,0 +1,30 @@
+@import './mixins.less';
+
+/* --------- waterfall --------- */
+.waterfall-appear {
+	opacity: 0.01;
+}
+
+.waterfall-appear.waterfall-appear-active {
+	opacity: 1;
+	transition: opacity .5s ease-in;
+}
+
+.waterfall-enter {
+	opacity: 0.01;
+}
+
+.waterfall-enter.waterfall-enter-active {
+	opacity: 1;
+	transition: opacity 500ms ease-in;
+}
+
+.waterfall-leave {
+	opacity: 1;
+}
+
+.waterfall-leave.waterfall-leave-active {
+	opacity: 0.01;
+	transition: opacity 300ms ease-in;
+}
+/* --------- /waterfall --------- */

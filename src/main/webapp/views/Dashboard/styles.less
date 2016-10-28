@@ -1,0 +1,26 @@
+@import '../../styles/mixins.less';
+
+.DashboardView{
+	.fitparent(64px 0 0 0);
+	.scroll-y();
+	.app-list{
+		padding: 8px;
+		.item{
+			display: inline-block;
+			margin: 8px;
+			width: 240px;
+		}
+	}
+}
+
+@media only screen and (max-device-width : 736px) {
+	.DashboardView{
+		.app-list{
+			padding: 16px;
+			.item{
+				margin: 0 0 16px 0;
+				width: 100%;
+			}
+		}
+	}
+}

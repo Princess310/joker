@@ -1,22 +1,40 @@
 @import '../../styles/mixins.less';
+@import '../../styles/transition-group.less';
+@import '../../styles/func.less';
 
 @font-face {
 	font-family: "Material Design Icons";
 	src: url("../../fonts/materialdesignicons-webfont.eot");
-    src: url("../../fonts/materialdesignicons-webfont.eot") format("embedded-opentype"), url("../../fonts/materialdesignicons-webfont.woff2") format("woff2"), url("../../fonts/materialdesignicons-webfont.woff") format("woff"), url("../../fonts/materialdesignicons-webfont.ttf") format("truetype"), url("../../fonts/materialdesignicons-webfont.svg") format("svg");
-    font-weight: normal;
-    font-style: normal;
+	src: url("../../fonts/materialdesignicons-webfont.eot") format("embedded-opentype"), url("../../fonts/materialdesignicons-webfont.woff2") format("woff2"), url("../../fonts/materialdesignicons-webfont.woff") format("woff"), url("../../fonts/materialdesignicons-webfont.ttf") format("truetype"), url("../../fonts/materialdesignicons-webfont.svg") format("svg");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Roboto-Medium";
+	src: url("../../fonts/Roboto-Medium.ttf");
+	font-weight: normal;
+	font-style: normal;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+	font-family: "微软雅黑";
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+.cn{
+	font-family: "微软雅黑";
 }
 
 html, body, #app {
 	height: 100%;
 	width: 100%;
+}
+
+a {
+	text-decoration: none;
 }
 
 .mdi {
@@ -32,9 +50,4 @@ html, body, #app {
 
 .cord-fabric{
 	.fitparent(64px 0 0 0);
-	line-height: 800px;
-	font-size: @font-size-largest;
-	text-align: center;
-	color: @mainColor;
-	background-color: @black-10;
 }

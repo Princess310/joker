@@ -26,7 +26,7 @@ public class UserWebHandler {
 
     @WebGet("/das-list-user")
     public WebResponse listUser(@WebUser User user){
-        List<User> users = userDao.list(user,null,0,100,"name");
+        List<User> users = userDao.list(user,null,0,100,"username");
         return webResponseBuilder.success(users);
     }
 

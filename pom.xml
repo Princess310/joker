@@ -17,6 +17,7 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
+					<encoding>utf8</encoding>
 				</configuration>
 			</plugin>
 
@@ -67,7 +68,7 @@
 									<fileset dir="../war" includes="**/*" excludes=".git/"/>
 								</delete>
 								<copy todir="../war">
-									<fileset dir="target/projectmvc"/>
+									<fileset dir="target/joker"/>
 								</copy>
 							</tasks>
 						</configuration>

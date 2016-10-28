@@ -7,16 +7,20 @@ import Grid from 'components/Grid';
 import css from './app.less';
 
 injectTapEventPlugin();
-function App(props) {
-	return (
-		<MuiThemeProvider>
-			<div>
-				<AppBar/>
-				<div className="cord-fabric">Joker Play</div>
-				<Grid />
-			</div>
-		</MuiThemeProvider>
-	)
+class App extends React.Component {
+	render() {
+		const { page } = this.props.params;
+
+		return (
+			<MuiThemeProvider>
+				<div>
+					<AppBar/>
+					{this.props.children}
+					<Grid />
+				</div>
+			</MuiThemeProvider>
+		)
+	}
 }
 
 export default App;
