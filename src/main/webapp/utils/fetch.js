@@ -28,20 +28,25 @@ const fetchDao = {
 	request: function(method, u, params){
 		const self = this;
 		let url = new URL(u, window.location.href);
+		let config = {
+			method: method,
+			headers: {
+				"Content-Type": "application/json"
+			},
+			credentials: "same-origin"
+		};
 
-		if(method !== "Post" && typeof params !== "undefined"){
+		if(method !== "POST" && typeof params !== "undefined"){
 			Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
 		}
 
+		// only post method to add body config
+		if(method === "POST"){
+			config.body = JSON.stringify(params);
+		}
+
 		return new Promise(function (resolve, reject) {
-			fetch(url, {
-				method: method,
-				body: JSON.stringify(params),
-				headers: {
-					"Content-Type": "application/json"
-				},
-				credentials: "same-origin"
-			})
+			fetch(url, config)
 			.then(self.checkStatus)
 			.then(self.parseJSON)
 			.then(function(data) {
