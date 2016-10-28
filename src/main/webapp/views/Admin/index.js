@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import AdminLogin from './AdminLogin';
+import Login from 'views/Login';
 import AdminContent from './AdminContent';
 
 class Admin extends Component {
@@ -8,7 +8,7 @@ class Admin extends Component {
 	}
 
 	render() {
-		let page =  <AdminLogin />;
+		let page =  <Login />;
 
 		if(user !== null && user.id){
 			page = <AdminContent />;

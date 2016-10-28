@@ -4,6 +4,7 @@ import {createHashHistory} from 'history';
 import AppContainer from './views/AppContainer';
 import Dashboard from './views/Dashboard';
 import App from './views/App';
+import Login from './views/Login';
 import Admin from './views/Admin';
 
 const routes = (
@@ -12,6 +13,7 @@ const routes = (
 		<Route path="/app" component={AppContainer}>
 			<Route path=":page" component={AppContainer}></Route>
 		</Route>
+		<Route path="/login" component={Login}></Route>
 		<Route path="/admin" component={Admin}></Route>
 	</Route>
 );
