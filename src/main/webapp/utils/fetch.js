@@ -41,8 +41,13 @@ const fetchDao = {
 		}
 
 		// only post method to add body config
-		if(method === "POST"){
-			config.body = JSON.stringify(params);
+		if(method === "POST" && typeof params !== "undefined"){
+			let payload = [];
+			Object.keys(params).forEach(key => payload.push(key + "=" + params[key]));
+			config.body = payload.join("&");
+
+			// change the Content-Type for mime
+			config.headers["Content-Type"] = "application/x-www-form-urlencoded";
 		}
 
 		return new Promise(function (resolve, reject) {

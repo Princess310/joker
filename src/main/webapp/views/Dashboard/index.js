@@ -17,7 +17,7 @@ class Dashboard extends Component {
 	componentDidMount() {
 		const self = this;
 
-		fetch.doGet("getAppList").then(function(data){
+		fetch.doGet("getAppList").then((data) => {
 			self.setState({
 				appList: data.result
 			});

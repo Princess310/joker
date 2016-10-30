@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { history } from 'routes';
 import { Link } from 'react-router';
+import fetch from 'utils/fetch';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
@@ -23,22 +24,32 @@ class Login extends Component {
 	}
 }
 
-const Logged = (props) => (
-	<IconMenu
-		{...props}
-		iconButtonElement={
-			<IconButton><MoreVertIcon /></IconButton>
-		}
-		targetOrigin={{horizontal: 'right', vertical: 'top'}}
-		anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-	>
-	<MenuItem primaryText="Refresh" />
-	<MenuItem primaryText="Help" />
-	<MenuItem primaryText="Sign out" />
-</IconMenu>
-);
+class Logged extends Component {
+	static muiName = 'IconMenu';
 
-Logged.muiName = 'IconMenu';
+	handleLogoff(e) {
+		fetch.doGet("logoff").then((response) => {
+			window.location.href = "";
+		});
+	}
+
+	render() {
+		return (
+			<IconMenu
+				{...this.props}
+				iconButtonElement={
+					<IconButton><MoreVertIcon /></IconButton>
+				}
+				targetOrigin={{horizontal: 'right', vertical: 'top'}}
+				anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+			>
+			<MenuItem primaryText="Refresh" />
+			<MenuItem primaryText="Help" />
+			<MenuItem primaryText="Sign out" onClick={(e) => this.handleLogoff(e)} />
+		</IconMenu>
+		);
+	}
+}
 
 class AppBarMenu extends Component {
 	state = {
