@@ -9,6 +9,7 @@ import MenuItem from 'material-ui/MenuItem';
 import FlatButton from 'material-ui/FlatButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import LinearProgress from 'material-ui/LinearProgress';
 
 class Login extends Component {
 	static muiName = 'FlatButton';
@@ -54,6 +55,7 @@ class Logged extends Component {
 class AppBarMenu extends Component {
 	state = {
 		logged: (user !== null && user.id),
+		showProgress: false
 	};
 
 	render() {
@@ -69,10 +71,13 @@ class AppBarMenu extends Component {
 		}
 
 		return (
-			<AppBar
-				title="Joker" 
-				iconElementRight={rightIcon}
-			/>
+			<div>
+				<AppBar
+					title="Joker" 
+					iconElementRight={rightIcon}
+				/>
+				{this.state.showProgress && <LinearProgress mode="indeterminate" />}
+			</div>
 		)
 	}
 }
