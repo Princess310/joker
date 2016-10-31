@@ -8,7 +8,7 @@ public class User extends BaseEntity<Long> {
     private String firstName;
     private String lastName;
     private String photoUrl;
-    
+
     // denote if it is an admin user
     private Boolean admin = false;
     
@@ -83,5 +83,7 @@ public class User extends BaseEntity<Long> {
     
     // --------- /Persistent Properties --------- //
     
-    
+    public String toString () {
+        return "id:" + this.getId() + ",username:" + this.getUsername() + ",admin:" + this.getAdmin();
+    }
 }

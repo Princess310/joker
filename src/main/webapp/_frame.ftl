@@ -15,7 +15,8 @@
 		[#if _r.user??]
 			user = {
 				id: ${_r.user.id},
-				userName: "${_r.user.username}"
+				userName: "${_r.user.username}",
+				admin: ${_r.user.admin?string('true', 'false')}
 			};
 		[#else]
 			user = null;

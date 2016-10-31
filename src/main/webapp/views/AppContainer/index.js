@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import BlankPage from 'components/BlankPage';
-import Blog from 'views/Blog';
+import Blog from 'containers/Blog';
 import Chat from 'views/Chat';
 import Gallery from 'views/Gallery';
 import Game from 'views/Game';

@@ -15,7 +15,7 @@ class Login extends Component {
 	static muiName = 'FlatButton';
 
 	handleClick(e) {
-		history.push('login')
+		history.push('login');
 	}
 
 	render() {
@@ -35,6 +35,7 @@ class Logged extends Component {
 	}
 
 	render() {
+		const admin = user !== null && user.id && user.admin;
 		return (
 			<IconMenu
 				{...this.props}
@@ -44,8 +45,9 @@ class Logged extends Component {
 				targetOrigin={{horizontal: 'right', vertical: 'top'}}
 				anchorOrigin={{horizontal: 'right', vertical: 'top'}}
 			>
-			<MenuItem primaryText="Refresh" />
-			<MenuItem primaryText="Help" />
+			<MenuItem primaryText="Index" onClick={(e) => history.push("/")}/>
+			{admin && <MenuItem primaryText="Admin Page" onClick={(e) => history.push("admin")} />}
+			<MenuItem primaryText="About" onClick={(e) => history.push("admin")}/>
 			<MenuItem primaryText="Sign out" onClick={(e) => this.handleLogoff(e)} />
 		</IconMenu>
 		);
@@ -54,7 +56,7 @@ class Logged extends Component {
 
 class AppBarMenu extends Component {
 	state = {
-		logged: (user !== null && user.id),
+		logged: (this.context.user !== null && this.context.user.id),
 		showProgress: false
 	};
 
@@ -81,6 +83,10 @@ class AppBarMenu extends Component {
 		)
 	}
 }
+
+AppBarMenu.contextTypes = {
+	user: React.PropTypes.object
+};
 
 
 export default AppBarMenu;
