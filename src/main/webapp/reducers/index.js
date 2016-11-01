@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
-import blog from './blog'
+import user from './user';
+import blog from './blog';
 
 const jokerApp = combineReducers({
+	user,
 	blog
 })
 

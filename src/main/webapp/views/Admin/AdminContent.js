@@ -7,7 +7,9 @@ class AdminContent extends Component {
 
 	render() {
 		return (
-			<div>AdminContent</div>
+			<div>
+				<div>Admin Content</div>
+			</div>
 		)
 	}
 }

@@ -3,7 +3,6 @@ import { addBlog } from '../actions'
 import Blog from '../views/Blog'
 
 const mapStateToProps = (state, ownProps) => {
-	console.log("state", state);
 	return {
 		sort: "DESC"
 	}

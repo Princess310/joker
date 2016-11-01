@@ -6,6 +6,7 @@ import Dashboard from './views/Dashboard';
 import App from './views/App';
 import Login from './views/Login';
 import Admin from './views/Admin';
+import User from 'containers/User';
 
 const routes = (
 	<Route path="/" component={App}>
@@ -14,7 +15,9 @@ const routes = (
 			<Route path=":page" component={AppContainer}></Route>
 		</Route>
 		<Route path="/login" component={Login}></Route>
-		<Route path="/admin" component={Admin}></Route>
+		<Route path="/admin" component={Admin}>
+			<Route path="user" component={User}></Route>
+		</Route>
 	</Route>
 );
 
