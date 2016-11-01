@@ -2,8 +2,9 @@ import { connect } from 'react-redux'
 import User from '../views/User'
 
 const mapStateToProps = (state, ownProps) => {
+	const users = state.user.users || [];
 	return {
-		sort: "DESC"
+		users: users
 	}
 }
 

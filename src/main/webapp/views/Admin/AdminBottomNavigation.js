@@ -1,0 +1,46 @@
+import React, {Component} from 'react';
+import FontIcon from 'material-ui/FontIcon';
+import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
+import Paper from 'material-ui/Paper';
+import { history } from 'routes';
+
+const userIcon = <FontIcon className="mdi mdi-user"></FontIcon>;
+const blogIcon = <FontIcon className="mdi mdi-blogger"></FontIcon>;
+const tagIcon = <FontIcon className="mdi mdi-tag"></FontIcon>;
+
+class AdminBottomNavigation extends Component {
+	state = {
+		selectedIndex: 0,
+	};
+
+	select = (index) => this.setState({selectedIndex: index});
+
+	render() {
+		return (
+			<Paper className="AdminBottomNavigation" zDepth={1}>
+				<BottomNavigation selectedIndex={this.state.selectedIndex}>
+					<BottomNavigationItem
+						label="Users"
+						icon={userIcon}
+						onTouchTap={() => this.select(0)}
+						onClick={(e) =>  history.push("/admin/user") }
+					/>
+					<BottomNavigationItem
+						label="Blogs"
+						icon={blogIcon}
+						onTouchTap={() => this.select(1)}
+						onClick={(e) =>  history.push("/admin/blog") }
+					/>
+					<BottomNavigationItem
+						label="Tags"
+						icon={tagIcon}
+						onTouchTap={() => this.select(2)}
+						onClick={(e) =>  history.push("/admin/tag") }
+					/>
+				</BottomNavigation>
+			</Paper>
+		);
+}
+}
+
+export default AdminBottomNavigation;

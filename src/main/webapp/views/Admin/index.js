@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import { history } from 'routes';
-import Login from 'views/Login';
-import Dashboard from 'views/Dashboard';
-import AdminContent from './AdminContent';
+import Paper from 'material-ui/Paper';
+import AdminBottomNavigation from './AdminBottomNavigation';
+import styles from "./styles.less";
 
 class Admin extends Component {
 	constructor(props) {
@@ -10,19 +10,16 @@ class Admin extends Component {
 	}
 
 	render() {
-		let page =  <Login />;
-
-		if(user !== null && user.id){
-			if(user.admin){
-				page = <AdminContent />;
-			}else {
-				page = <Dashboard />;
-			}
+		if(user === null || (user !== null && !user.admin)){
+			window.location.href = "";
 		}
 
 		return (
-			<div>
-				{page}
+			<div className="AdminView">
+				<Paper className="container">
+					{this.props.children}
+				</Paper>
+				<AdminBottomNavigation />
 			</div>
 		)
 	}

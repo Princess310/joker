@@ -6,6 +6,7 @@ import Dashboard from './views/Dashboard';
 import App from './views/App';
 import Login from './views/Login';
 import Admin from './views/Admin';
+import AdminContent from './views/Admin/AdminContent';
 import User from 'containers/User';
 
 const routes = (
@@ -16,6 +17,7 @@ const routes = (
 		</Route>
 		<Route path="/login" component={Login}></Route>
 		<Route path="/admin" component={Admin}>
+			<IndexRoute component={AdminContent}/>
 			<Route path="user" component={User}></Route>
 		</Route>
 	</Route>
