@@ -5,9 +5,9 @@ import FontIcon from 'material-ui/FontIcon';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import { fetchUsers } from 'actions';
+import { fetchTags } from 'actions';
 
-class User extends Component {
+class Blog extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -17,7 +17,7 @@ class User extends Component {
 
 	componentDidMount() {
 		const { dispatch } = this.props;
-		dispatch(fetchUsers())
+		dispatch(fetchTags())
 	}
 
 	handleOpenDialog = () => {
@@ -33,14 +33,14 @@ class User extends Component {
 	}
 
 	render() {
-		const { users } = this.props;
+		const { tags } = this.props;
 
-		const tableRows = users.map(user => {
+		const tableRows = tags.map(tag => {
 			return (
-				<TableRow key={user.id}>
-					<TableRowColumn>{user.id}</TableRowColumn>
-					<TableRowColumn>{user.username}</TableRowColumn>
-					<TableRowColumn>{user.displayName}</TableRowColumn>
+				<TableRow key={tag.id}>
+					<TableRowColumn>{tag.id}</TableRowColumn>
+					<TableRowColumn>{tag.name}</TableRowColumn>
+					<TableRowColumn>{tag.color}</TableRowColumn>
 				</TableRow>
 			);
 		});
@@ -64,12 +64,12 @@ class User extends Component {
 					<TableHeader>
 						<TableRow>
 							<TableHeaderColumn colSpan="2" tooltip="Search panel" className="table-search-bar">
-								<TextField hintText="Search for user" className="search-text"/>
+								<TextField hintText="Search for tag" className="search-text"/>
 								<RaisedButton
 									label="Search"
 									primary={true}
 									className="ml-2"
-									icon={<FontIcon className="mdi mdi-user" />}
+									icon={<FontIcon className="mdi mdi-tag" />}
 								/>
 							</TableHeaderColumn>
 							<TableHeaderColumn tooltip="Action panel" className="table-action-bar">
@@ -93,7 +93,7 @@ class User extends Component {
 						<TableRow>
 							<TableHeaderColumn>ID</TableHeaderColumn>
 							<TableHeaderColumn>Name</TableHeaderColumn>
-							<TableHeaderColumn>displayName</TableHeaderColumn>
+							<TableHeaderColumn>Color</TableHeaderColumn>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
@@ -101,13 +101,13 @@ class User extends Component {
 					</TableBody>
 				</Table>
 				<Dialog
-					title="Add User"
+					title="Add Tag"
 					actions={dialogActions}
 					modal={false}
 					open={this.state.openDialog}
 					onRequestClose={this.handleCloseDialog}
 				>
-					TODO: Add user
+					TODO: Add tag
 				</Dialog>
 			</div>
 		)
@@ -115,4 +115,4 @@ class User extends Component {
 }
 
 
-export default User;
+export default Blog;

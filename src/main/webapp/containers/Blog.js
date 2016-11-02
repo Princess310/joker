@@ -1,29 +1,15 @@
 import { connect } from 'react-redux'
-import { addBlog } from '../actions'
 import Blog from '../views/Blog'
 
 const mapStateToProps = (state, ownProps) => {
+	const blogs = state.blog.blogs || [];
 	return {
-		sort: "DESC"
-	}
-}
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-	return {
-		onClickAddBlog: () => {
-			dispatch(addBlog(
-				{
-					id: 1,
-					content: "blog content"
-				}
-			));
-		}
+		blogs: blogs
 	}
 }
 
 const BlogContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
+	mapStateToProps
 )(Blog)
 
 export default BlogContainer

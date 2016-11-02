@@ -10,6 +10,7 @@ class Admin extends Component {
 	}
 
 	render() {
+		const { location } = this.props;
 		if(user === null || (user !== null && !user.admin)){
 			window.location.href = "";
 		}
@@ -19,7 +20,7 @@ class Admin extends Component {
 				<Paper className="container">
 					{this.props.children}
 				</Paper>
-				<AdminBottomNavigation />
+				<AdminBottomNavigation path={location.pathname} />
 			</div>
 		)
 	}

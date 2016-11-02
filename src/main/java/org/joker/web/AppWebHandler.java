@@ -17,7 +17,7 @@ public class AppWebHandler {
     private WebResponseBuilder webResponseBuilder;
 
     @WebGet("/getAppList")
-    public WebResponse listUser(){
+    public WebResponse getAppList(){
         // TODO: add the data to the database later
         App blog = new App("Blog", "/app/blog", "images/blog-index-bg.jpg", "生活点滴", "这里，属于我，也属于你", "博客er");
         App chat = new App("Chat", "/app/chat", "images/chat-index-bg.png", "畅所欲言", "聊一聊，那些年！", "畅聊");

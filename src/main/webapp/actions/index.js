@@ -42,24 +42,46 @@ const requestBlogs = () => {
 	}
 }
 
-const receiveBlogs = () => {
+const receiveBlogs = (blogs) => {
 	return {
 		type: RECEIVE_BLOGS,
-
+		blogs: blogs
 	}
 }
 
 export const fetchBlogs = () => {
 	return dispatch => {
 		dispatch(requestBlogs())
-		return fetch.doGet('das-list-blog')
+		return fetch.doGet('getBlogList')
 			.then(response => dispatch(receiveBlogs(response.result)))
 	}
 }
 
-export const addBlog = (blog) => {
-		return {
-			type: 'ADD_Blog',
-			blog
-		}
+
+/**
+ * Tag Actions
+ * prince 2016/11/2
+ */
+export const REQUEST_TAGS = 'REQUEST_TAGS';
+export const RECEIVE_TAGS = 'RECEIVE_TAGS';
+
+const requestTags = () => {
+	return {
+		type: REQUEST_TAGS
+	}
+}
+
+const receiveTags = (tags) => {
+	return {
+		type: RECEIVE_TAGS,
+		tags: tags
+	}
+}
+
+export const fetchTags = () => {
+	return dispatch => {
+		dispatch(requestTags())
+		return fetch.doGet('getTagList')
+			.then(response => dispatch(receiveTags(response.result)))
+	}
 }

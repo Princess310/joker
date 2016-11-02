@@ -8,10 +8,20 @@ const userIcon = <FontIcon className="mdi mdi-user"></FontIcon>;
 const blogIcon = <FontIcon className="mdi mdi-blogger"></FontIcon>;
 const tagIcon = <FontIcon className="mdi mdi-tag"></FontIcon>;
 
+const indexMap = {
+	'/admin/user': 0,
+	'/admin/blog': 1,
+	'/admin/tag': 2
+}
+
 class AdminBottomNavigation extends Component {
-	state = {
-		selectedIndex: 0,
-	};
+	constructor(props) {
+		super(props);
+		const { path } = this.props;
+		this.state = {
+			selectedIndex: indexMap[path]
+		}
+	}
 
 	select = (index) => this.setState({selectedIndex: index});
 

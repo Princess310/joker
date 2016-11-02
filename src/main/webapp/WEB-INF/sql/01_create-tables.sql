@@ -1,5 +1,5 @@
-﻿-- quick EMPTY : truncate "user", blog, blog_tag, blog_type, blog_message RESTART IDENTITY cascade;
--- quick DROP  : drop table  "user",blog, blog_tag, blog_type, blog_message;
+﻿-- quick EMPTY : truncate "user", blog, tag, blogtag, type, message RESTART IDENTITY cascade;
+-- quick DROP  : drop table  "user",blog, tag, blogtag, type, message;
 
 -- --------- user --------- --
 CREATE TABLE "user"
@@ -21,7 +21,6 @@ CREATE TABLE "blog"
 	id bigserial NOT NULL,
 	title character varying(128),
 	content text,
-	"tagIds" bigint[],
 	"typeId" bigint,
 	"viewCount" bigint,
 	"isTop" boolean,
@@ -33,31 +32,43 @@ CREATE TABLE "blog"
 create index on "user" (username);
 -- --------- /blog --------- --
 
--- --------- blog_tag --------- --
-CREATE TABLE "blog_tag"
+-- --------- tag --------- --
+CREATE TABLE "tag"
 (
 	id bigserial NOT NULL,
 	name character varying(128),
 	color character varying(128),
 	"ctime" timestamp without time zone,
 	"utime" timestamp without time zone,
+	CONSTRAINT tag_pkey PRIMARY KEY (id)
+);
+-- --------- /tag --------- --
+
+-- --------- blogtag --------- --
+CREATE TABLE "blogtag"
+(
+	id bigserial NOT NULL,
+	blogId bigint,
+	tagId bigint,
+	"ctime" timestamp without time zone,
+	"utime" timestamp without time zone,
 	CONSTRAINT blog_tag_pkey PRIMARY KEY (id)
 );
--- --------- /blog_tag --------- --
+-- --------- /blogtag --------- --
 
--- --------- blog_type --------- --
-CREATE TABLE "blog_type"
+-- --------- type --------- --
+CREATE TABLE "type"
 (
 	id bigserial NOT NULL,
 	name character varying(128),
 	"ctime" timestamp without time zone,
 	"utime" timestamp without time zone,
-	CONSTRAINT blog_type_pkey PRIMARY KEY (id)
+	CONSTRAINT type_pkey PRIMARY KEY (id)
 );
--- --------- /blog_type --------- --
+-- --------- /type --------- --
 
--- --------- blog_message --------- --
-CREATE TABLE "blog_message"
+-- --------- message --------- --
+CREATE TABLE "message"
 (
 	id bigserial NOT NULL,
 	username character varying(128),
@@ -67,6 +78,6 @@ CREATE TABLE "blog_message"
 	pid bigint,
 	"ctime" timestamp without time zone,
 	"utime" timestamp without time zone,
-	CONSTRAINT blog_message_pkey PRIMARY KEY (id)
+	CONSTRAINT message_pkey PRIMARY KEY (id)
 );
--- --------- /blog_message --------- --
+-- --------- /message --------- --

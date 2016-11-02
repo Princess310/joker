@@ -1,7 +1,7 @@
 package org.joker.entity;
 
 /**
- * Created by Prionce on 2016/10/28 0028.
+ * Created by Prince on 2016/10/28 0028.
  * Record the app list
  */
 public class App extends BaseEntity<Long> {
