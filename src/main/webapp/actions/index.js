@@ -6,6 +6,8 @@
  */
 export const REQUEST_USERS = 'REQUEST_USERS';
 export const RECEIVE_USERS = 'RECEIVE_USERS';
+export const ADD_USERS = 'ADD_USERS';
+export const DELETE_USERS = 'DELETE_USERS';
 
 const requestUsers = () => {
 	return {
@@ -20,11 +22,43 @@ const receiveUsers = (users) => {
 	}
 }
 
+const addUser = (user) => {
+	return {
+		type: ADD_USERS,
+		user: user
+	}
+}
+
+const deleteUser = (ids) => {
+	return {
+		type: DELETE_USERS,
+		ids: ids
+	}
+}
+
+
 export const fetchUsers = () => {
 	return dispatch => {
 		dispatch(requestUsers())
 		return fetch.doGet('das-list-user')
 			.then(response => dispatch(receiveUsers(response.result)))
+	}
+}
+
+export const createUser = (username, pwd) => {
+	return dispatch => {
+		return fetch.doPost('createUser', {
+			username: username,
+			password: pwd
+		}).then(response => dispatch(addUser(response.result)));
+	}
+}
+
+export const deleteUsers = (ids) => {
+	return dispatch => {
+		return fetch.doDelete('deleteUsers', {
+			ids: ids.toString()
+		}).then(response => dispatch(deleteUser(ids)));
 	}
 }
 

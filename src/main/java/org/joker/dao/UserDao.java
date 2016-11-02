@@ -1,10 +1,9 @@
 package org.joker.dao;
 
 import com.google.inject.Singleton;
+import org.j8ql.query.Condition;
 import org.j8ql.query.Query;
 import org.joker.entity.User;
-
-import static org.j8ql.query.Query.and;
 
 @Singleton
 public class UserDao extends BaseDao<User,Long> {
@@ -29,6 +28,23 @@ public class UserDao extends BaseDao<User,Long> {
 		 Long id = create(null, user);
 
 		 return get(null,id).get();
+	}
+
+	public void deleteUsers(String userIds){
+		Condition condition = null;
+		String[] ids = userIds.trim().split(",");
+
+		if(!userIds.trim().equals("")){
+			for(String id: ids){
+				if(condition == null){
+					condition = Query.or("id", Long.parseLong(id));
+				}else{
+					condition = condition.or("id", Long.parseLong(id));
+				}
+			}
+
+			daoHelper.execute(Query.delete(entityClass).where(condition));
+		}
 	}
 		
 }

@@ -5,13 +5,16 @@ import FontIcon from 'material-ui/FontIcon';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import { fetchUsers } from 'actions';
+import { fetchUsers, createUser, deleteUsers  } from 'actions';
 
+let selectedUsers = [];
 class User extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			openDialog: false
+			openDialog: false,
+			username: "",
+			pwd: ""
 		}
 	}
 
@@ -32,6 +35,60 @@ class User extends Component {
 		});
 	}
 
+	handleChange(e, key) {
+		const value = e.target.value;
+		if(key === "username"){
+			this.setState({
+				username: value
+			});
+		}else {
+			this.setState({
+				pwd: value
+			});
+		}
+	}
+
+	handleCreateUser = (e) => {
+		const { username, pwd } = this.state;
+		const { dispatch } = this.props;
+		const self = this;
+
+		dispatch(createUser(username, pwd)).then(() => {
+			self.handleCloseDialog();
+			this.setState({
+				username: "",
+				pwd: ""
+			});
+		});
+	}
+
+	handleDeletUsers = (e) => {
+		const { dispatch } = this.props;
+
+		if(selectedUsers.length > 0){
+			dispatch(deleteUsers(selectedUsers));
+		}		
+	}
+
+	handleTableSelect = (data) => {
+		const { users } = this.props;
+		let ids = [];
+
+		if(data === "all"){
+			users.map(user => {
+				ids.push(user.id);
+			});
+		}else if(data === "none"){
+			ids = [];
+		}else {
+			data.map((index) => {
+				ids.push(users[index].id);
+			});
+		}
+		
+		selectedUsers = ids;
+	}
+
 	render() {
 		const { users } = this.props;
 
@@ -44,7 +101,6 @@ class User extends Component {
 				</TableRow>
 			);
 		});
-
 		const dialogActions = [
 			<FlatButton
 				label="Cancel"
@@ -55,12 +111,12 @@ class User extends Component {
 				label="Submit"
 				primary={true}
 				keyboardFocused={true}
-				onTouchTap={this.handleCloseDialog}
+				onTouchTap={this.handleCreateUser}
 			/>
 		];
 		return (
 			<div>
-				<Table multiSelectable={true} selectable={true}>
+				<Table multiSelectable={true} selectable={true} onRowSelection={this.handleTableSelect}>
 					<TableHeader>
 						<TableRow>
 							<TableHeaderColumn colSpan="2" tooltip="Search panel" className="table-search-bar">
@@ -86,6 +142,7 @@ class User extends Component {
 										secondary={true}
 										className="ml-2"
 										icon={<FontIcon className="mdi mdi-delete" />}
+										onTouchTap={this.handleDeletUsers}
 									/>
 								</div>
 							</TableHeaderColumn>
@@ -107,7 +164,24 @@ class User extends Component {
 					open={this.state.openDialog}
 					onRequestClose={this.handleCloseDialog}
 				>
-					TODO: Add user
+					<TextField
+						hintText="long time no see"
+						fullWidth={true}
+						floatingLabelText="username"
+						errorText=""
+						value={this.state.username}
+						onChange={(e) => this.handleChange(e, "username")}
+						onKeyUp={(e) => { e.which === 13 && this.handleCreateUser(e) }}
+					/>
+					<TextField
+						hintText="Mua"
+						fullWidth={true}
+						type="password"
+						floatingLabelText="password"
+						value={this.state.pwd}
+						onChange={(e) => this.handleChange(e, "password")}
+						onKeyUp={(e) => { e.which === 13 && this.handleCreateUser(e) }}
+					/>
 				</Dialog>
 			</div>
 		)

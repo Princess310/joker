@@ -74,7 +74,7 @@ class Login extends Component {
 						fullWidth={true}
 						type="password"
 						floatingLabelText="password"
-						value={this.state.password}
+						value={this.state.pwd}
 						onChange={(e) => this.handleChange(e, "password")}
 						onKeyUp={(e) => { e.which === 13 && this.handleLogin(e) }}
 					/>
