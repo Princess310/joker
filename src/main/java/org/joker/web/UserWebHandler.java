@@ -5,6 +5,7 @@ import com.britesnow.snow.web.param.annotation.WebUser;
 import com.britesnow.snow.web.rest.annotation.WebDelete;
 import com.britesnow.snow.web.rest.annotation.WebGet;
 import com.britesnow.snow.web.rest.annotation.WebPost;
+import com.britesnow.snow.web.rest.annotation.WebPut;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.joker.dao.UserDao;
@@ -27,9 +28,9 @@ public class UserWebHandler {
 	private WebResponseBuilder webResponseBuilder;
 
 
-    @WebGet("/das-list-user")
-    public WebResponse listUser(@WebUser User user){
-        List<User> users = userDao.list(user,null,0,100);
+    @WebGet("/getUserList")
+    public WebResponse getUserList(@WebUser User user, @WebParam("keyword") String keyword){
+        List<User> users = userDao.getUserList(user,keyword,0,100);
         return webResponseBuilder.success(users);
     }
 
@@ -43,6 +44,12 @@ public class UserWebHandler {
     public WebResponse deleteUsers(@WebParam("ids") String ids){
         userDao.deleteUsers(ids);
         return webResponseBuilder.success();
+    }
+
+    @WebPut("/updateUser")
+    public WebResponse updateUser(@WebUser User user, @WebParam("id") Long id, @WebParam("username" ) String username, @WebParam("admin") Boolean admin){
+        User u = userDao.updateUser(user, id, username, admin);
+        return webResponseBuilder.success(u);
     }
 
 }

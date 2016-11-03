@@ -6,8 +6,9 @@
  */
 export const REQUEST_USERS = 'REQUEST_USERS';
 export const RECEIVE_USERS = 'RECEIVE_USERS';
-export const ADD_USERS = 'ADD_USERS';
+export const ADD_USER = 'ADD_USER';
 export const DELETE_USERS = 'DELETE_USERS';
+export const UPDATE_USER = 'UPDATE_USER';
 
 const requestUsers = () => {
 	return {
@@ -24,23 +25,31 @@ const receiveUsers = (users) => {
 
 const addUser = (user) => {
 	return {
-		type: ADD_USERS,
+		type: ADD_USER,
 		user: user
 	}
 }
 
-const deleteUser = (ids) => {
+const removeUser = (ids) => {
 	return {
 		type: DELETE_USERS,
 		ids: ids
 	}
 }
 
+const alterUser = (user) => {
+	return {
+		type: UPDATE_USER,
+		user: user
+	}
+}
 
-export const fetchUsers = () => {
+
+export const fetchUsers = (keyword) => {
+	if (typeof keyword === "undefined") { keyword = "" }
 	return dispatch => {
 		dispatch(requestUsers())
-		return fetch.doGet('das-list-user')
+		return fetch.doGet('getUserList', {keyword: keyword})
 			.then(response => dispatch(receiveUsers(response.result)))
 	}
 }
@@ -49,7 +58,7 @@ export const createUser = (username, pwd) => {
 	return dispatch => {
 		return fetch.doPost('createUser', {
 			username: username,
-			password: pwd
+			pwd: pwd
 		}).then(response => dispatch(addUser(response.result)));
 	}
 }
@@ -58,7 +67,17 @@ export const deleteUsers = (ids) => {
 	return dispatch => {
 		return fetch.doDelete('deleteUsers', {
 			ids: ids.toString()
-		}).then(response => dispatch(deleteUser(ids)));
+		}).then(response => dispatch(removeUser(ids)));
+	}
+}
+
+export const updateUser = (id, username, admin) => {
+	return dispatch => {
+		return fetch.doPut('updateUser', {
+			id: id,
+			username: username,
+			admin: admin
+		}).then(response => dispatch(alterUser(response.result)));
 	}
 }
 
