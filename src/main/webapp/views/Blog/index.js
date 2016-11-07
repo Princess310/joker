@@ -4,8 +4,12 @@ import TextField from 'material-ui/TextField';
 import FontIcon from 'material-ui/FontIcon';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import { fetchBlogs } from 'actions';
+import Editor from 'components/Editor';
+import styles from './style.less';
 
 class Blog extends Component {
 	constructor(props) {
@@ -107,8 +111,31 @@ class Blog extends Component {
 					modal={false}
 					open={this.state.openDialog}
 					onRequestClose={this.handleCloseDialog}
+					contentStyle = {{
+						width: '95%',
+						maxWidth: '95%'
+					}}
+					className="dialog"
 				>
-					TODO: Add blog
+					<TextField
+						hintText="Blog Title"
+					/>
+					<br />
+					<SelectField
+						floatingLabelText="Frequency"
+						value={this.state.value}
+						onChange={this.handleChange}
+						style={{
+							marginBottom: "16px"
+						}}
+					>
+						<MenuItem value={1} primaryText="tag01" />
+						<MenuItem value={2} primaryText="tag02" />
+						<MenuItem value={3} primaryText="tag03" />
+						<MenuItem value={4} primaryText="tag04" />
+						<MenuItem value={5} primaryText="tag05" />
+					</SelectField>
+					<Editor />
 				</Dialog>
 			</div>
 		)
