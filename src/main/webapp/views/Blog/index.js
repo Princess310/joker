@@ -7,7 +7,7 @@ import FlatButton from 'material-ui/FlatButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import { fetchBlogs } from 'actions';
+import { fetchBlogs, createBlog, fetchTags} from 'actions';
 import Editor from 'components/Editor';
 import styles from './style.less';
 
@@ -15,13 +15,25 @@ class Blog extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			openDialog: false
+			openDialog: false,
+			title: "",
+			tagId: 0,
+			content: "",
+			titleError: ""
 		}
 	}
 
 	componentDidMount() {
 		const { dispatch } = this.props;
 		dispatch(fetchBlogs())
+		dispatch(fetchTags()).then((result) => {
+			const tags = result.tags;
+			if(tags.length > 0){
+				this.setState({
+					tagId: tags[0].id
+				});
+			}
+		});
 	}
 
 	handleOpenDialog = () => {
@@ -36,8 +48,49 @@ class Blog extends Component {
 		});
 	}
 
+	handleEditorChange = (content) => {
+		this.setState({
+			content: content
+		});
+	}
+
+	handleSelectTagChange = (event, index, value) => {
+		this.setState({
+			tagId: value
+		});
+	}
+
+	handleChangeTitle(e) {
+		const value = e.target.value;
+		this.setState({
+			title: value
+		});
+	}
+
+	handleCreateBlog(e) {
+		const {title, tagId, content} = this.state;
+		const { dispatch } = this.props;
+		const self = this;
+
+		if(title.trim() === ""){
+			this.setState({
+				titleError: "title can not be empty!"
+			});
+
+			return false;
+		}
+
+		dispatch(createBlog(title, tagId, content)).then(() => {
+			self.handleCloseDialog();
+			this.setState({
+				title: "",
+				content: ""
+			});
+		});
+	}
+
 	render() {
-		const { blogs } = this.props;
+		const { blogs, tags } = this.props;
 
 		const tableRows = blogs.map(blog => {
 			return (
@@ -47,6 +100,10 @@ class Blog extends Component {
 					<TableRowColumn>{blog.viewCount}</TableRowColumn>
 				</TableRow>
 			);
+		});
+
+		const tagsList = tags.map(tag => {
+			return <MenuItem key={tag.id} value={tag.id} primaryText={tag.name} />
 		});
 
 		const dialogActions = [
@@ -59,7 +116,7 @@ class Blog extends Component {
 				label="Submit"
 				primary={true}
 				keyboardFocused={true}
-				onTouchTap={this.handleCloseDialog}
+				onTouchTap={(e) => this.handleCreateBlog(e)}
 			/>
 		];
 
@@ -119,23 +176,24 @@ class Blog extends Component {
 				>
 					<TextField
 						hintText="Blog Title"
+						floatingLabelText="blog"
+						errorText={this.state.titleError}
+						value={this.state.title}
+						onChange={(e) => this.handleChangeTitle(e)}
+						onKeyUp={(e) => { e.which === 13 && this.handleCreateBlog(e) }}
 					/>
 					<br />
 					<SelectField
 						floatingLabelText="Frequency"
-						value={this.state.value}
-						onChange={this.handleChange}
+						value={this.state.tagId}
+						onChange={this.handleSelectTagChange}
 						style={{
 							marginBottom: "16px"
 						}}
 					>
-						<MenuItem value={1} primaryText="tag01" />
-						<MenuItem value={2} primaryText="tag02" />
-						<MenuItem value={3} primaryText="tag03" />
-						<MenuItem value={4} primaryText="tag04" />
-						<MenuItem value={5} primaryText="tag05" />
+						{tagsList}
 					</SelectField>
-					<Editor />
+					<Editor onChange={this.handleEditorChange} />
 				</Dialog>
 			</div>
 		)

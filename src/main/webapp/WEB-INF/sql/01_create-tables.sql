@@ -48,8 +48,8 @@ CREATE TABLE "tag"
 CREATE TABLE "blogtag"
 (
 	id bigserial NOT NULL,
-	blogId bigint,
-	tagId bigint,
+	"blogId" bigint,
+	"tagId" bigint,
 	"ctime" timestamp without time zone,
 	"utime" timestamp without time zone,
 	CONSTRAINT blog_tag_pkey PRIMARY KEY (id)

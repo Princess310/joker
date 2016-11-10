@@ -5,12 +5,22 @@ import java.time.LocalDateTime;
 public class Blog extends BaseEntity<Long> {
     private String title;
     private String content;
-    private Integer typeId;
-    private Integer viewCount;
+    private Long typeId;
+    private Long viewCount;
     private boolean isTop;
-    private Integer userId;
+    private Long userId;
     private LocalDateTime ctime;
     private LocalDateTime utime;
+
+    public Blog(){}
+
+    public Blog(String title, String content, Long userId, LocalDateTime ctime, LocalDateTime utime) {
+        this.title = title;
+        this.content = content;
+        this.userId = userId;
+        this.ctime = ctime;
+        this.utime = utime;
+    }
 
     public String getTitle() {
         return title;
@@ -28,20 +38,28 @@ public class Blog extends BaseEntity<Long> {
         this.content = content;
     }
 
-    public Integer getTypeId() {
+    public Long getTypeId() {
         return typeId;
     }
 
-    public void setTypeId(Integer typeId) {
+    public void setTypeId(Long typeId) {
         this.typeId = typeId;
     }
 
-    public Integer getViewCount() {
+    public Long getViewCount() {
         return viewCount;
     }
 
-    public void setViewCount(Integer viewCount) {
+    public void setViewCount(Long viewCount) {
         this.viewCount = viewCount;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public boolean isTop() {
@@ -50,14 +68,6 @@ public class Blog extends BaseEntity<Long> {
 
     public void setTop(boolean top) {
         isTop = top;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
     }
 
     public LocalDateTime getCtime() {

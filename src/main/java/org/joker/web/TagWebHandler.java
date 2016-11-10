@@ -1,7 +1,9 @@
 package org.joker.web;
 
+import com.britesnow.snow.web.param.annotation.WebParam;
 import com.britesnow.snow.web.param.annotation.WebUser;
 import com.britesnow.snow.web.rest.annotation.WebGet;
+import com.britesnow.snow.web.rest.annotation.WebPost;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.joker.dao.TagDao;
@@ -26,5 +28,11 @@ public class TagWebHandler {
         List<Tag> tags = tagDao.getTagList();
 
         return webResponseBuilder.success(tags);
+    }
+
+    @WebPost("/createTag")
+    public WebResponse createTag(@WebParam("name") String name, @WebParam("color") String color){
+        Tag tag = tagDao.createTag(name, color);
+        return webResponseBuilder.success(tag);
     }
 }

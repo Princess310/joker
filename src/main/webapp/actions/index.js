@@ -88,6 +88,7 @@ export const updateUser = (id, username, admin) => {
  */
 export const REQUEST_BLOGS = 'REQUEST_BLOGS';
 export const RECEIVE_BLOGS = 'RECEIVE_BLOGS';
+export const ADD_BLOG = 'ADD_BLOG';
 
 const requestBlogs = () => {
 	return {
@@ -102,11 +103,28 @@ const receiveBlogs = (blogs) => {
 	}
 }
 
+const addBlog = (blog) => {
+	return {
+		type: ADD_BLOG,
+		blog: blog
+	}
+}
+
 export const fetchBlogs = () => {
 	return dispatch => {
 		dispatch(requestBlogs())
 		return fetch.doGet('getBlogList')
 			.then(response => dispatch(receiveBlogs(response.result)))
+	}
+}
+
+export const createBlog = (title, tagId, content) => {
+	return dispatch => {
+		return fetch.doPost('createBlog', {
+			title: title,
+			tagId: tagId,
+			content: content
+		}).then(response => dispatch(addBlog(response.result)));
 	}
 }
 
@@ -117,6 +135,7 @@ export const fetchBlogs = () => {
  */
 export const REQUEST_TAGS = 'REQUEST_TAGS';
 export const RECEIVE_TAGS = 'RECEIVE_TAGS';
+export const ADD_TAG = 'ADD_TAG';
 
 const requestTags = () => {
 	return {
@@ -131,10 +150,26 @@ const receiveTags = (tags) => {
 	}
 }
 
+const addTag = (tag) => {
+	return {
+		type: ADD_TAG,
+		tag: tag
+	}
+}
+
 export const fetchTags = () => {
 	return dispatch => {
 		dispatch(requestTags())
 		return fetch.doGet('getTagList')
 			.then(response => dispatch(receiveTags(response.result)))
+	}
+}
+
+export const createTag = (name, color) => {
+	return dispatch => {
+		return fetch.doPost('createTag', {
+			name: name,
+			color: color
+		}).then(response => dispatch(addTag(response.result)));
 	}
 }

@@ -1,7 +1,9 @@
 package org.joker.web;
 
+import com.britesnow.snow.web.param.annotation.WebParam;
 import com.britesnow.snow.web.param.annotation.WebUser;
 import com.britesnow.snow.web.rest.annotation.WebGet;
+import com.britesnow.snow.web.rest.annotation.WebPost;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.joker.dao.BlogDao;
@@ -26,5 +28,12 @@ public class BlogWebHandler {
         List<Blog> blogs = blogDao.getBlogList();
 
         return webResponseBuilder.success(blogs);
+    }
+
+    @WebPost("/createBlog")
+    public WebResponse createBlog(@WebUser User user, @WebParam("title") String title, @WebParam("tagId") Long tagId, @WebParam("content") String content){
+        Blog blog  = blogDao.createBlog(user, title, tagId, content);
+
+        return webResponseBuilder.success(blog);
     }
 }

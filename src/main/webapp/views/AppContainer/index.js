@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import BlankPage from 'components/BlankPage';
-import Blog from 'containers/Blog';
+import BlogList from 'containers/BlogList';
 import Chat from 'views/Chat';
 import Gallery from 'views/Gallery';
 import Game from 'views/Game';
@@ -12,7 +12,7 @@ class AppContainer extends Component {
 		super(props);
 		this.state = {
 			appMap: {
-				blog: <Blog />,
+				blog: <BlogList />,
 				chat: <Chat />,
 				gallery: <Gallery />,
 				game: <Game />,

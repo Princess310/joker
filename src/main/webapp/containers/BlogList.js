@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import Blog from '../views/Blog'
+import BlogList from '../views/Blog/BlogList'
 
 const mapStateToProps = (state, ownProps) => {
 	const blogs = state.blog || [];
@@ -10,8 +10,8 @@ const mapStateToProps = (state, ownProps) => {
 	}
 }
 
-const BlogContainer = connect(
+const BlogListContainer = connect(
 	mapStateToProps
-)(Blog)
+)(BlogList)
 
-export default BlogContainer
+export default BlogListContainer

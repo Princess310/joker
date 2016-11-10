@@ -5,13 +5,17 @@ import FontIcon from 'material-ui/FontIcon';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import { fetchTags } from 'actions';
+import { fetchTags, createTag } from 'actions';
 
 class Blog extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			openDialog: false
+			openDialog: false,
+			name: "",
+			color: "",
+			nameError: "",
+			colorError: ""
 		}
 	}
 
@@ -29,6 +33,59 @@ class Blog extends Component {
 	handleCloseDialog = () => {
 		this.setState({
 			openDialog: false
+		});
+	}
+
+	handleChange(e, key) {
+		const value = e.target.value;
+		if(key === "name"){
+			this.setState({
+				name: value
+			});
+		}else {
+			this.setState({
+				color: value
+			});
+		}
+	}
+
+	handleCreateTag(){
+		const { name, color } = this.state;
+		const { dispatch } = this.props;
+		const self = this;
+
+		let nameError, colorError, checkFlag = true;
+
+		if(name.trim() === ""){
+			nameError = "name can not be empty!";
+			checkFlag = false;
+		}else {
+			nameError = "";
+		}
+
+		if(color.trim() === ""){
+			colorError = "Password can not be empty!";
+			checkFlag = false;
+		}else {
+			colorError = "";
+		}
+
+		this.setState({
+			nameError: nameError,
+			colorError: colorError
+		});
+
+		if(!checkFlag){
+			return false;
+		}
+
+
+		dispatch(createTag(name, color)).then(() => {
+			self.handleCloseDialog();
+			this.setState({
+				username: "",
+				pwd: ""
+			});
 		});
 	}
 
@@ -55,7 +112,7 @@ class Blog extends Component {
 				label="Submit"
 				primary={true}
 				keyboardFocused={true}
-				onTouchTap={this.handleCloseDialog}
+				onTouchTap={(e) => this.handleCreateTag(e)}
 			/>
 		];
 		return (
@@ -107,7 +164,24 @@ class Blog extends Component {
 					open={this.state.openDialog}
 					onRequestClose={this.handleCloseDialog}
 				>
-					TODO: Add tag
+					<TextField
+						hintText="Enter name"
+						fullWidth={true}
+						floatingLabelText="name"
+						errorText={this.state.nameError}
+						value={this.state.name}
+						onChange={(e) => this.handleChange(e, "name")}
+						onKeyUp={(e) => { e.which === 13 && this.handleCreateTag(e) }}
+					/><br />
+					<TextField
+						hintText="Enter color"
+						fullWidth={true}
+						floatingLabelText="color"
+						errorText={this.state.colorError}
+						value={this.state.color}
+						onChange={(e) => this.handleChange(e, "color")}
+						onKeyUp={(e) => { e.which === 13 && this.handleCreateTag(e) }}
+					/>
 				</Dialog>
 			</div>
 		)
