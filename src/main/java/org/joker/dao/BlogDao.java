@@ -2,6 +2,7 @@ package org.joker.dao;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.j8ql.query.Condition;
 import org.j8ql.query.Query;
 import org.joker.entity.Blog;
 import org.joker.entity.BlogTag;
@@ -15,9 +16,14 @@ public class BlogDao extends BaseDao<Blog,Long> {
     @Inject
     private BlogTagDao blogTagDao;
 
-    public List<Blog> getBlogList (){
-        List<Blog> list =  daoHelper.list(Query.select(Blog.class));
-        return list;
+    public List<Blog> getBlogList (User user, String keyword, int page, int pageSize, String... orderBy){
+        Condition condition = null;
+
+        if(!keyword.trim().equals("")){
+            condition = Query.or("title; ilike", "%" + keyword + "%");
+        }
+
+        return  daoHelper.list(listSelectBuilder(user,condition,page,pageSize,orderBy));
     }
 
     public Blog createBlog(User user, String title, Long tagId, String content){
@@ -29,5 +35,38 @@ public class BlogDao extends BaseDao<Blog,Long> {
         blogTagDao.create(user, blogTag);
 
         return get(null,id).get();
+    }
+
+    public void deleteBlogs(String blogIds){
+        Condition condition = null;
+        String[] ids = blogIds.trim().split(",");
+
+        if(!blogIds.trim().equals("")){
+            for(String id: ids){
+                if(condition == null){
+                    condition = Query.or("id", Long.parseLong(id));
+                }else{
+                    condition = condition.or("id", Long.parseLong(id));
+                }
+            }
+
+            daoHelper.execute(Query.delete(entityClass).where(condition));
+        }
+    }
+
+    public Blog updateBlog(User user, Long id, String title, String content, Long tagId){
+        Blog blog = daoHelper.first(Query.select(entityClass).where("id", id)).orElse(null);
+        blog.setTitle(title);
+        blog.setContent(content);
+        blog.setUtime(LocalDateTime.now());
+        update(user, blog, id);
+
+        Condition condition = Query.and("blogId",id );
+        BlogTag blogTag = blogTagDao.daoHelper.first(Query.select(BlogTag.class).where(condition)).orElse(null);
+        blogTag.setTagId(tagId);
+        blogTag.setUtime(LocalDateTime.now());
+        blogTagDao.update(user, blogTag, blogTag.getId());
+
+        return blog;
     }
 }

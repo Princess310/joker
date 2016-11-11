@@ -1,6 +1,6 @@
 import {
   REQUEST_TAGS, RECEIVE_TAGS,
-  ADD_TAG
+  ADD_TAG, DELETE_TAGS, UPDATE_TAG
 } from 'actions';
 
 const tag = (state = [], action) => {
@@ -14,6 +14,18 @@ const tag = (state = [], action) => {
 				...state,
 				action.tag
 			]
+		case DELETE_TAGS:
+			const tags = state.filter(tag => {
+				return (action.ids.indexOf(tag.id) < 0);
+			});
+			return tags;
+		case UPDATE_TAG:
+			state.map((tag, index) => {
+				if(tag.id === action.tag.id){
+					state[index] = action.tag;
+				};
+			});
+			return state;
 		default:
 			return state
 	}

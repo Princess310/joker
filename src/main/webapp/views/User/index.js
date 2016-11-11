@@ -135,7 +135,7 @@ class User extends Component {
 		});
 	}
 
-	handleDeletUsers = (e) => {
+	handleDeleteUsers = (e) => {
 		const { dispatch } = this.props;
 
 		if(selectedUsers.length > 0){
@@ -263,7 +263,7 @@ class User extends Component {
 										secondary={true}
 										className="ml-2"
 										icon={<FontIcon className="mdi mdi-delete" />}
-										onTouchTap={this.handleDeletUsers}
+										onTouchTap={this.handleDeleteUsers}
 									/>
 								</div>
 							</TableHeaderColumn>

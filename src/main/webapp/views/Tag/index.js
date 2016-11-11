@@ -5,17 +5,21 @@ import FontIcon from 'material-ui/FontIcon';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import { fetchTags, createTag } from 'actions';
+import { fetchTags, createTag, deleteTags, updateTag } from 'actions';
 
+let selectedTags = [];
 class Blog extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			openDialog: false,
+			id: 0,
 			name: "",
 			color: "",
 			nameError: "",
-			colorError: ""
+			colorError: "",
+			currentAction: "add",
+			keyword: ""
 		}
 	}
 
@@ -32,7 +36,9 @@ class Blog extends Component {
 
 	handleCloseDialog = () => {
 		this.setState({
-			openDialog: false
+			openDialog: false,
+			name: "",
+			color: ""
 		});
 	}
 
@@ -49,8 +55,57 @@ class Blog extends Component {
 		}
 	}
 
-	handleCreateTag(){
-		const { name, color } = this.state;
+	handleTableSelect = (data) => {
+		const { tags } = this.props;
+		let ids = [];
+
+		if(data === "all"){
+			tags.map(tag => {
+				ids.push(tag.id);
+			});
+		}else if(data === "none"){
+			ids = [];
+		}else {
+			data.map((index) => {
+				ids.push(tags[index].id);
+			});
+		}
+		
+		selectedTags = ids;
+	}
+
+	handleAddTag = (e) => {
+		this.setState({
+			currentAction: "add"
+		});
+		this.handleOpenDialog();
+	}
+
+	handleSearchChange = (e) => {
+		const value = e.target.value;
+
+		this.setState({
+			keyword: value
+		});
+	}
+
+	handleViewTag = (e) => {
+		e.preventDefault();
+		const { tags } = this.props;
+		const tr = e.target.parentElement;
+		const tag = tags[tr.dataset.index];
+
+		this.setState({
+			id: tag.id,
+			name: tag.name,
+			color: tag.color,
+			currentAction: "update"
+		});
+		this.handleOpenDialog();
+	}
+
+	handleSaveTag(){
+		const { id, name, color, currentAction } = this.state;
 		const { dispatch } = this.props;
 		const self = this;
 
@@ -64,7 +119,7 @@ class Blog extends Component {
 		}
 
 		if(color.trim() === ""){
-			colorError = "Password can not be empty!";
+			colorError = "Color can not be empty!";
 			checkFlag = false;
 		}else {
 			colorError = "";
@@ -79,24 +134,40 @@ class Blog extends Component {
 			return false;
 		}
 
-
-		dispatch(createTag(name, color)).then(() => {
-			self.handleCloseDialog();
-			this.setState({
-				username: "",
-				pwd: ""
+		if(currentAction === "add"){
+			dispatch(createTag(name, color)).then(() => {
+				self.handleCloseDialog();
 			});
-		});
+		}else {
+			dispatch(updateTag(id, name, color)).then(() => {
+				self.handleCloseDialog();
+			});
+		}
+	}
+
+	handleDeleteTags = (e) => {
+		const { dispatch } = this.props;
+
+		if(selectedTags.length > 0){
+			dispatch(deleteTags(selectedTags));
+		}		
+	}
+
+	handleSearch = (e) => {
+		const { keyword } = this.state;
+		const { dispatch } = this.props;
+
+		dispatch(fetchTags(keyword))
 	}
 
 	render() {
 		const { tags } = this.props;
 
-		const tableRows = tags.map(tag => {
+		const tableRows = tags.map((tag, index) => {
 			return (
-				<TableRow key={tag.id}>
+				<TableRow key={tag.id} data-index={index}>
 					<TableRowColumn>{tag.id}</TableRowColumn>
-					<TableRowColumn>{tag.name}</TableRowColumn>
+					<TableRowColumn className="mark h-v" onTouchTap={this.handleViewTag}>{tag.name}</TableRowColumn>
 					<TableRowColumn>{tag.color}</TableRowColumn>
 				</TableRow>
 			);
@@ -112,21 +183,27 @@ class Blog extends Component {
 				label="Submit"
 				primary={true}
 				keyboardFocused={true}
-				onTouchTap={(e) => this.handleCreateTag(e)}
+				onTouchTap={(e) => this.handleSaveTag(e)}
 			/>
 		];
 		return (
 			<div>
-				<Table multiSelectable={true} selectable={true}>
+				<Table multiSelectable={true} selectable={true} onRowSelection={this.handleTableSelect}>
 					<TableHeader>
 						<TableRow>
 							<TableHeaderColumn colSpan="2" tooltip="Search panel" className="table-search-bar">
-								<TextField hintText="Search for tag" className="search-text"/>
+								<TextField
+									hintText="Search for tag"
+									className="search-text"
+									onChange={this.handleSearchChange}
+									onKeyUp={(e) => { e.which === 13 && this.handleSearch(e) }}
+								/>
 								<RaisedButton
 									label="Search"
 									primary={true}
 									className="ml-2"
 									icon={<FontIcon className="mdi mdi-tag" />}
+									onTouchTap={this.handleSearch}
 								/>
 							</TableHeaderColumn>
 							<TableHeaderColumn tooltip="Action panel" className="table-action-bar">
@@ -136,13 +213,14 @@ class Blog extends Component {
 										primary={true}
 										className="ml-2"
 										icon={<FontIcon className="mdi mdi-plus" />}
-										onTouchTap={this.handleOpenDialog}
+										onTouchTap={this.handleAddTag}
 									/>
 									<RaisedButton
 										label="Delete"
 										secondary={true}
 										className="ml-2"
 										icon={<FontIcon className="mdi mdi-delete" />}
+										onTouchTap={this.handleDeleteTags}
 									/>
 								</div>
 							</TableHeaderColumn>
@@ -171,7 +249,7 @@ class Blog extends Component {
 						errorText={this.state.nameError}
 						value={this.state.name}
 						onChange={(e) => this.handleChange(e, "name")}
-						onKeyUp={(e) => { e.which === 13 && this.handleCreateTag(e) }}
+						onKeyUp={(e) => { e.which === 13 && this.handleSaveTag(e) }}
 					/><br />
 					<TextField
 						hintText="Enter color"
@@ -180,7 +258,7 @@ class Blog extends Component {
 						errorText={this.state.colorError}
 						value={this.state.color}
 						onChange={(e) => this.handleChange(e, "color")}
-						onKeyUp={(e) => { e.which === 13 && this.handleCreateTag(e) }}
+						onKeyUp={(e) => { e.which === 13 && this.handleSaveTag(e) }}
 					/>
 				</Dialog>
 			</div>

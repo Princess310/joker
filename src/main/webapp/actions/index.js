@@ -89,6 +89,8 @@ export const updateUser = (id, username, admin) => {
 export const REQUEST_BLOGS = 'REQUEST_BLOGS';
 export const RECEIVE_BLOGS = 'RECEIVE_BLOGS';
 export const ADD_BLOG = 'ADD_BLOG';
+export const DELETE_BLOGS = 'DELETE_BLOGS';
+export const UPDATE_BLOG = 'UPDATE_BLOG';
 
 const requestBlogs = () => {
 	return {
@@ -110,10 +112,25 @@ const addBlog = (blog) => {
 	}
 }
 
-export const fetchBlogs = () => {
+const removeBlog = (ids) => {
+	return {
+		type: DELETE_BLOGS,
+		ids: ids
+	}
+}
+
+const alterBlog = (blog) => {
+	return {
+		type: UPDATE_BLOG,
+		blog: blog
+	}
+}
+
+export const fetchBlogs = (keyword) => {
+	if (typeof keyword === "undefined") { keyword = "" }
 	return dispatch => {
 		dispatch(requestBlogs())
-		return fetch.doGet('getBlogList')
+		return fetch.doGet('getBlogList', {keyword: keyword})
 			.then(response => dispatch(receiveBlogs(response.result)))
 	}
 }
@@ -128,6 +145,25 @@ export const createBlog = (title, tagId, content) => {
 	}
 }
 
+export const deleteBlogs = (ids) => {
+	return dispatch => {
+		return fetch.doDelete('deleteBlogs', {
+			ids: ids.toString()
+		}).then(response => dispatch(removeBlog(ids)));
+	}
+}
+
+export const updateBlog = (id, title, content, tagId) => {
+	return dispatch => {
+		return fetch.doPut('updateBlog', {
+			id: id,
+			title: title,
+			content: content,
+			tagId: tagId
+		}).then(response => dispatch(alterBlog(response.result)));
+	}
+}
+
 
 /**
  * Tag Actions
@@ -136,6 +172,8 @@ export const createBlog = (title, tagId, content) => {
 export const REQUEST_TAGS = 'REQUEST_TAGS';
 export const RECEIVE_TAGS = 'RECEIVE_TAGS';
 export const ADD_TAG = 'ADD_TAG';
+export const DELETE_TAGS = 'DELETE_TAGS';
+export const UPDATE_TAG = 'UPDATE_TAG';
 
 const requestTags = () => {
 	return {
@@ -157,10 +195,25 @@ const addTag = (tag) => {
 	}
 }
 
-export const fetchTags = () => {
+const removeTag = (ids) => {
+	return {
+		type: DELETE_TAGS,
+		ids: ids
+	}
+}
+
+const alterTag = (tag) => {
+	return {
+		type: UPDATE_TAG,
+		tag: tag
+	}
+}
+
+export const fetchTags = (keyword) => {
+	if (typeof keyword === "undefined") { keyword = "" }
 	return dispatch => {
 		dispatch(requestTags())
-		return fetch.doGet('getTagList')
+		return fetch.doGet('getTagList', {keyword: keyword})
 			.then(response => dispatch(receiveTags(response.result)))
 	}
 }
@@ -171,5 +224,23 @@ export const createTag = (name, color) => {
 			name: name,
 			color: color
 		}).then(response => dispatch(addTag(response.result)));
+	}
+}
+
+export const deleteTags = (ids) => {
+	return dispatch => {
+		return fetch.doDelete('deleteTags', {
+			ids: ids.toString()
+		}).then(response => dispatch(removeTag(ids)));
+	}
+}
+
+export const updateTag = (id, name, color) => {
+	return dispatch => {
+		return fetch.doPut('updateTag', {
+			id: id,
+			name: name,
+			color: color
+		}).then(response => dispatch(alterTag(response.result)));
 	}
 }

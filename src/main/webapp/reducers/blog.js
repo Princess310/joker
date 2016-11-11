@@ -1,6 +1,6 @@
 import {
   REQUEST_BLOGS, RECEIVE_BLOGS,
-  ADD_BLOG
+  ADD_BLOG, DELETE_BLOGS, UPDATE_BLOG
 } from 'actions';
 
 const blog = (state = [], action) => {
@@ -14,6 +14,18 @@ const blog = (state = [], action) => {
 				...state,
 				action.blog
 			]
+		case DELETE_BLOGS:
+			const blogs = state.filter(blog => {
+				return (action.ids.indexOf(blog.id) < 0);
+			});
+			return blogs;
+		case UPDATE_BLOG:
+			state.map((blog, index) => {
+				if(blog.id === action.blog.id){
+					state[index] = action.blog;
+				};
+			});
+			return state;
 		default:
 			return state
 	}

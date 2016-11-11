@@ -7,19 +7,23 @@ import FlatButton from 'material-ui/FlatButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import { fetchBlogs, createBlog, fetchTags} from 'actions';
+import { fetchBlogs, createBlog, deleteBlogs, updateBlog, fetchTags} from 'actions';
 import Editor from 'components/Editor';
 import styles from './style.less';
 
+let selectedBlogs = [];
 class Blog extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			openDialog: false,
+			id: 0,
 			title: "",
 			tagId: 0,
 			content: "",
-			titleError: ""
+			titleError: "",
+			currentAction: "add",
+			keyword: ""
 		}
 	}
 
@@ -44,7 +48,9 @@ class Blog extends Component {
 
 	handleCloseDialog = () => {
 		this.setState({
-			openDialog: false
+			openDialog: false,
+			title: "",
+			content: ""
 		});
 	}
 
@@ -67,8 +73,57 @@ class Blog extends Component {
 		});
 	}
 
-	handleCreateBlog(e) {
-		const {title, tagId, content} = this.state;
+	handleTableSelect = (data) => {
+		const { blogs } = this.props;
+		let ids = [];
+
+		if(data === "all"){
+			blogs.map(blog => {
+				ids.push(blog.id);
+			});
+		}else if(data === "none"){
+			ids = [];
+		}else {
+			data.map((index) => {
+				ids.push(blogs[index].id);
+			});
+		}
+		
+		selectedBlogs = ids;
+	}
+
+	handleAddBlog = (e) => {
+		this.setState({
+			currentAction: "add"
+		});
+		this.handleOpenDialog();
+	}
+
+	handleSearchChange = (e) => {
+		const value = e.target.value;
+
+		this.setState({
+			keyword: value
+		});
+	}
+
+	handleViewBlog = (e) => {
+		e.preventDefault();
+		const { blogs } = this.props;
+		const tr = e.target.parentElement;
+		const blog = blogs[tr.dataset.index];
+
+		this.setState({
+			id: blog.id,
+			title: blog.title,
+			content: blog.content,
+			currentAction: "update"
+		});
+		this.handleOpenDialog();
+	}
+
+	handleSaveBlog(e) {
+		const { id, title, tagId, content, currentAction} = this.state;
 		const { dispatch } = this.props;
 		const self = this;
 
@@ -80,23 +135,40 @@ class Blog extends Component {
 			return false;
 		}
 
-		dispatch(createBlog(title, tagId, content)).then(() => {
-			self.handleCloseDialog();
-			this.setState({
-				title: "",
-				content: ""
+		if(currentAction === "add"){
+			dispatch(createBlog(title, tagId, content)).then(() => {
+				self.handleCloseDialog();
 			});
-		});
+		}else {
+			dispatch(updateBlog(id, title, content, tagId)).then(() => {
+				self.handleCloseDialog();
+			});
+		}
+	}
+
+	handleDeleteBlogs = (e) => {
+		const { dispatch } = this.props;
+
+		if(selectedBlogs.length > 0){
+			dispatch(deleteBlogs(selectedBlogs));
+		}		
+	}
+
+	handleSearch = (e) => {
+		const { keyword } = this.state;
+		const { dispatch } = this.props;
+
+		dispatch(fetchBlogs(keyword))
 	}
 
 	render() {
 		const { blogs, tags } = this.props;
 
-		const tableRows = blogs.map(blog => {
+		const tableRows = blogs.map((blog, index) => {
 			return (
-				<TableRow key={blog.id}>
+				<TableRow key={blog.id} data-index={index}>
 					<TableRowColumn>{blog.id}</TableRowColumn>
-					<TableRowColumn>{blog.title}</TableRowColumn>
+					<TableRowColumn className="mark h-v" onTouchTap={this.handleViewBlog}>{blog.title}</TableRowColumn>
 					<TableRowColumn>{blog.viewCount}</TableRowColumn>
 				</TableRow>
 			);
@@ -116,22 +188,28 @@ class Blog extends Component {
 				label="Submit"
 				primary={true}
 				keyboardFocused={true}
-				onTouchTap={(e) => this.handleCreateBlog(e)}
+				onTouchTap={(e) => this.handleSaveBlog(e)}
 			/>
 		];
 
 		return (
 			<div>
-				<Table multiSelectable={true} selectable={true}>
+				<Table multiSelectable={true} selectable={true} onRowSelection={this.handleTableSelect}>
 					<TableHeader>
 						<TableRow>
 							<TableHeaderColumn colSpan="2" tooltip="Search bar" className="table-search-bar">
-								<TextField hintText="Search for blog" className="search-text"/>
+								<TextField
+									hintText="Search for blog"
+									className="search-text"
+									onChange={this.handleSearchChange}
+									onKeyUp={(e) => { e.which === 13 && this.handleSearch(e) }}
+								/>
 								<RaisedButton
 									label="Search"
 									primary={true}
 									className="ml-2"
 									icon={<FontIcon className="mdi mdi-blogger" />}
+									onTouchTap={this.handleSearch}
 								/>
 							</TableHeaderColumn>
 							<TableHeaderColumn tooltip="Action bar" className="table-action-bar">
@@ -141,13 +219,14 @@ class Blog extends Component {
 										primary={true}
 										className="ml-2"
 										icon={<FontIcon className="mdi mdi-plus" />}
-										onTouchTap={this.handleOpenDialog}
+										onTouchTap={this.handleAddBlog}
 									/>
 									<RaisedButton
 										label="Delete"
 										secondary={true}
 										className="ml-2"
 										icon={<FontIcon className="mdi mdi-delete" />}
+										onTouchTap={this.handleDeleteBlogs}
 									/>
 								</div>
 							</TableHeaderColumn>
@@ -180,7 +259,7 @@ class Blog extends Component {
 						errorText={this.state.titleError}
 						value={this.state.title}
 						onChange={(e) => this.handleChangeTitle(e)}
-						onKeyUp={(e) => { e.which === 13 && this.handleCreateBlog(e) }}
+						onKeyUp={(e) => { e.which === 13 && this.handleSaveBlog(e) }}
 					/>
 					<br />
 					<SelectField
@@ -193,7 +272,7 @@ class Blog extends Component {
 					>
 						{tagsList}
 					</SelectField>
-					<Editor onChange={this.handleEditorChange} />
+					<Editor onChange={this.handleEditorChange} value={this.state.content}/>
 				</Dialog>
 			</div>
 		)

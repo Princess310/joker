@@ -2,8 +2,10 @@ package org.joker.web;
 
 import com.britesnow.snow.web.param.annotation.WebParam;
 import com.britesnow.snow.web.param.annotation.WebUser;
+import com.britesnow.snow.web.rest.annotation.WebDelete;
 import com.britesnow.snow.web.rest.annotation.WebGet;
 import com.britesnow.snow.web.rest.annotation.WebPost;
+import com.britesnow.snow.web.rest.annotation.WebPut;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.joker.dao.BlogDao;
@@ -24,8 +26,8 @@ public class BlogWebHandler {
     private WebResponseBuilder webResponseBuilder;
 
     @WebGet("/getBlogList")
-    public WebResponse getBlogList(@WebUser User user){
-        List<Blog> blogs = blogDao.getBlogList();
+    public WebResponse getBlogList(@WebUser User user, @WebParam("keyword") String keyword){
+        List<Blog> blogs = blogDao.getBlogList(user,keyword,0,100);
 
         return webResponseBuilder.success(blogs);
     }
@@ -33,6 +35,19 @@ public class BlogWebHandler {
     @WebPost("/createBlog")
     public WebResponse createBlog(@WebUser User user, @WebParam("title") String title, @WebParam("tagId") Long tagId, @WebParam("content") String content){
         Blog blog  = blogDao.createBlog(user, title, tagId, content);
+
+        return webResponseBuilder.success(blog);
+    }
+
+    @WebDelete("/deleteBlogs")
+    public WebResponse deleteBlogs(@WebParam("ids") String ids){
+        blogDao.deleteBlogs(ids);
+        return webResponseBuilder.success();
+    }
+
+    @WebPut("/updateBlog")
+    public  WebResponse updateBlog(@WebUser User user, @WebParam("id") Long id, @WebParam("title") String title, @WebParam("content") String content, @WebParam("tagId") Long tagId){
+        Blog blog = blogDao.updateBlog(user, id, title, content, tagId);
 
         return webResponseBuilder.success(blog);
     }
