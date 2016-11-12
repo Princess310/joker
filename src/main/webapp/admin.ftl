@@ -1,8 +1,3 @@
-[#-- If admin, we bypass the _frame.ftl and load directly the targeted template --]
-[#if piStarts("/admin")]
-	[@includeTemplate name="admin.ftl"/]
-[#-- if we have a user in the request, we display the application --]
-[#else]
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,7 +20,7 @@
 </head>
 
 <body>
-	[@includeFrameContent /]
+	<div id="app-admin"></div>
+	<script async src="${_r.contextPath}/dist/admin.js"></script>
 </body>
 </html>
-[/#if]

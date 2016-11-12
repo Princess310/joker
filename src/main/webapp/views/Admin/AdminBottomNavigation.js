@@ -33,19 +33,19 @@ class AdminBottomNavigation extends Component {
 						label="Users"
 						icon={userIcon}
 						onTouchTap={() => this.select(0)}
-						onClick={(e) =>  history.push("/admin/user") }
+						onClick={(e) =>  history.push("/user") }
 					/>
 					<BottomNavigationItem
 						label="Blogs"
 						icon={blogIcon}
 						onTouchTap={() => this.select(1)}
-						onClick={(e) =>  history.push("/admin/blog") }
+						onClick={(e) =>  history.push("/blog") }
 					/>
 					<BottomNavigationItem
 						label="Tags"
 						icon={tagIcon}
 						onTouchTap={() => this.select(2)}
-						onClick={(e) =>  history.push("/admin/tag") }
+						onClick={(e) =>  history.push("/tag") }
 					/>
 				</BottomNavigation>
 			</Paper>

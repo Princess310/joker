@@ -1,30 +1,46 @@
 import React, {Component} from 'react';
 import { history } from 'routes';
 import Paper from 'material-ui/Paper';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import AdminAppBar from './AdminAppBar';
 import AdminBottomNavigation from './AdminBottomNavigation';
+import Grid from 'components/Grid';
 import styles from "./styles.less";
 
 class Admin extends Component {
+	getChildContext(){
+		return {user: user};
+	}
+
 	constructor(props) {
 		super(props);
 	}
 
 	render() {
 		const { location } = this.props;
-		if(user === null || (user !== null && !user.admin)){
-			window.location.href = "";
+		const logged = (user !== null && user.admin)
+		if(!logged){
+			history.push("login");
 		}
 
 		return (
-			<div className="AdminView">
-				<Paper className="container">
-					{this.props.children}
-				</Paper>
-				<AdminBottomNavigation path={location.pathname} />
-			</div>
+			<MuiThemeProvider>
+				<div className="AdminView">
+					<AdminAppBar />
+					<Paper className={logged ? "container" : "container fill"}>
+						{this.props.children}
+					</Paper>
+					{ logged && <AdminBottomNavigation path={location.pathname} />}
+					<Grid />
+				</div>
+			</MuiThemeProvider>
 		)
 	}
 }
+
+Admin.childContextTypes = {
+	user: React.PropTypes.object
+};
 
 
 export default Admin;

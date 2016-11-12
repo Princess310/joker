@@ -45,14 +45,14 @@ class Logged extends Component {
 				targetOrigin={{horizontal: 'right', vertical: 'top'}}
 				anchorOrigin={{horizontal: 'right', vertical: 'top'}}
 			>
-			<MenuItem primaryText="Index" onClick={(e) => history.push("/")}/>
-			<MenuItem primaryText="About" onClick={(e) => history.push("admin")}/>
+			<MenuItem primaryText="Index" onClick={(e) => window.location.href = "../"}/>
+			<MenuItem primaryText="Sign out" onClick={(e) => this.handleLogoff(e)} />
 		</IconMenu>
 		);
 	}
 }
 
-class AppBarMenu extends Component {
+class AdminAppBar extends Component {
 	state = {
 		logged: (this.context.user !== null && this.context.user.id),
 		showProgress: false
@@ -64,10 +64,7 @@ class AppBarMenu extends Component {
 
 		// If its login page, add the link to index
 		if(hash.includes("login") || (hash.includes("admin") && !this.state.logged)) {
-			rightIcon = (<Link to="/" ><FlatButton style={{
-				color:"#ffffff",
-				marginTop:7
-			}} label='Welcome'/></Link>);
+			rightIcon = (<div></div>);
 		}
 
 		return (
@@ -82,9 +79,9 @@ class AppBarMenu extends Component {
 	}
 }
 
-AppBarMenu.contextTypes = {
+AdminAppBar.contextTypes = {
 	user: React.PropTypes.object
 };
 
 
-export default AppBarMenu;
+export default AdminAppBar;
