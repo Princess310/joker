@@ -8,7 +8,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import { fetchBlogs, createBlog, deleteBlogs, updateBlog, fetchTags} from 'actions';
-import Editor from 'components/Editor';
+import SumEditor from 'components/SumEditor';
 import styles from './style.less';
 
 let selectedBlogs = [];
@@ -272,7 +272,7 @@ class Blog extends Component {
 					>
 						{tagsList}
 					</SelectField>
-					<Editor onChange={this.handleEditorChange} value={this.state.content}/>
+					<SumEditor onChange={this.handleEditorChange} value={this.state.content}/>
 				</Dialog>
 			</div>
 		)
