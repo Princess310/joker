@@ -17,7 +17,8 @@ dev/
 # prevent the compiled .js/.css files to be in the SCM
 templates.js
 *.css
-!src/main/webapp/bootstrap/css/*
+!src/main/webapp/libs/*/*
+!src/main/webapp/libs/*/*/*
 # remove intellij stuff
 *.iml
 .idea/
