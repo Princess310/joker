@@ -11,28 +11,8 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import LinearProgress from 'material-ui/LinearProgress';
 
-class Login extends Component {
-	static muiName = 'FlatButton';
-
-	handleClick(e) {
-		history.push('login');
-	}
-
-	render() {
-		return (
-			<FlatButton {...this.props} label="Login" onClick={(e) => this.handleClick(e)}/>
-		);
-	}
-}
-
-class Logged extends Component {
+class Menu extends Component {
 	static muiName = 'IconMenu';
-
-	handleLogoff(e) {
-		fetch.doGet("logoff").then((response) => {
-			window.location.href = "";
-		});
-	}
 
 	render() {
 		const admin = user !== null && user.id && user.admin;
@@ -46,7 +26,7 @@ class Logged extends Component {
 				anchorOrigin={{horizontal: 'right', vertical: 'top'}}
 			>
 			<MenuItem primaryText="Index" onClick={(e) => history.push("/")}/>
-			<MenuItem primaryText="About" onClick={(e) => history.push("admin")}/>
+			<MenuItem primaryText="About" onClick={(e) => history.push("/about")}/>
 		</IconMenu>
 		);
 	}
@@ -54,21 +34,12 @@ class Logged extends Component {
 
 class AppBarMenu extends Component {
 	state = {
-		logged: (this.context.user !== null && this.context.user.id),
 		showProgress: false
 	};
 
 	render() {
-		let rightIcon = this.state.logged ? <Logged /> : <Login />;
+		let rightIcon = <Menu />;
 		let hash = window.location.hash.substr(1);
-
-		// If its login page, add the link to index
-		if(hash.includes("login") || (hash.includes("admin") && !this.state.logged)) {
-			rightIcon = (<Link to="/" ><FlatButton style={{
-				color:"#ffffff",
-				marginTop:7
-			}} label='Welcome'/></Link>);
-		}
 
 		return (
 			<div>

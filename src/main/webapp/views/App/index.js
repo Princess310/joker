@@ -4,6 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import AppBar from 'Views/AppBar';
 import Drawer from 'Views/Drawer';
+import SiteRecord from 'Views/SiteRecord';
 import Grid from 'components/Grid';
 import css from './app.less';
 
@@ -21,6 +22,7 @@ class App extends React.Component {
 				<div>
 					<AppBar/>
 					{this.props.children}
+					<SiteRecord />
 					<Grid />
 					<Drawer />
 				</div>
