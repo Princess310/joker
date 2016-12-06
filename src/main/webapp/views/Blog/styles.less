@@ -1,0 +1,33 @@
+@import '../../styles/mixins.less';
+
+.dialog{
+	.DraftEditor-editorContainer{
+		.public-DraftEditor-content{
+			min-height: 400px;
+		}
+	}
+}
+
+.blog-list-container{
+	position: relative;
+	margin: 0 auto;
+	width: 1080px;
+	height: 100%;
+	.blog-list{
+		position: absolute;
+		top: 8px;
+		left: 0;
+		bottom: 8px;
+		width: 800px;
+		.scroll-y();
+	}
+	.action-panel{
+		position: absolute;
+		top: 8px;
+		right: 0;
+		bottom: 8px;
+	}
+	.contact-panel{
+		margin-top: 15px;
+	}
+}

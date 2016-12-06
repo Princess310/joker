@@ -1,0 +1,27 @@
+@import '../../styles/mixins.less';
+
+.id-card{
+	width: 280px;
+}
+
+.contact-panel{
+	width: 280px;
+	.mdi{
+		font-size: 24px;
+		&.mdi-wechat{
+			color: @qrcode;
+		}
+		&.mdi-gmail{
+			color: @gmail;
+		}
+	}
+}
+
+.qrcode-wrapper{
+	width: 240px;
+	height: auto;
+	img{
+		width: 100%;
+		height: auto;
+	}
+}

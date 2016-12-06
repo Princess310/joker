@@ -9,7 +9,7 @@ import MenuItem from 'material-ui/MenuItem';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import { fetchBlogs, createBlog, deleteBlogs, updateBlog, fetchTags} from 'actions';
 import SumEditor from 'components/SumEditor';
-import styles from './style.less';
+import styles from './styles.less';
 
 let selectedBlogs = [];
 class Blog extends Component {

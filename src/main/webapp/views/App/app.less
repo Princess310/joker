@@ -64,8 +64,33 @@ a {
 	&.mdi-delete:before{
 		content: "\f1c0";
 	}
+	&.mdi-wechat:before{
+		content: "\f611";
+	}
+	&.mdi-qrcode:before{
+		content: "\f432";	
+	}
+	&.mdi-qqchat:before{
+		content: "\f605";
+	}
+	&.mdi-gmail:before{
+		content: "\f2ab";
+	}
+	&.mdi-github-circle:before{
+		content: "\f2a4";
+	}
 }
 
 .cord-fabric{
 	.fitparent(64px 0 0 0);
 }
+
+/* --------- /Scrollbar --------- */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-button:vertical{display:none}
+::-webkit-scrollbar-track:vertical{background-color:transparent;}
+::-webkit-scrollbar-track-piece{background-color:transparent;}
+::-webkit-scrollbar-thumb:vertical{background-color:@color-Cyan-base;border-radius:6px}
+::-webkit-scrollbar-thumb:vertical:hover,
+::-webkit-scrollbar-thumb:vertical:active {background-color: @color-Cyan-7}
+/* --------- /Scrollbar --------- */
