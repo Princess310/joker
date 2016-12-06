@@ -11,29 +11,29 @@ class ContactPanel extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-	        openPopup: false,
-	    };
+			openPopup: false,
+		};
 	}
 
 	handleTouchTap = (event) => {
-	    // This prevents ghost click.
-	    event.preventDefault();
+		// This prevents ghost click.
+		event.preventDefault();
 
-	    this.setState({
-	      openPopup: true,
-	      anchorEl: event.currentTarget,
-	    });
-    }
+		this.setState({
+			openPopup: true,
+			anchorEl: event.currentTarget,
+		});
+	}
 
 	handleRequestClose = () => {
-	    this.setState({
-	      openPopup: false,
-	    });
-    }
+		this.setState({
+		  openPopup: false,
+		});
+	}
 
-    handleRedirectToGithub = () => {
-    	window.location.href = "https://github.com/Princess310"
-    }
+	handleRedirectToGithub = () => {
+		window.location.href = "https://github.com/Princess310"
+	}
 
 	render() {
 		return (

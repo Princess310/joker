@@ -13,21 +13,39 @@
 	margin: 0 auto;
 	width: 1080px;
 	height: 100%;
-	.blog-list{
+	.blog-panel{
 		position: absolute;
 		top: 8px;
 		left: 0;
 		bottom: 8px;
 		width: 800px;
-		.scroll-y();
+		padding: 15px;
+		.list{
+			position: absolute;
+			top: 88px;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			padding: 0 15px 15px 15px;
+			.scroll-y();
+			.blog-card{
+				margin-top: 15px;
+			}
+		}
 	}
 	.action-panel{
 		position: absolute;
-		top: 8px;
+		top: 0;
 		right: 0;
 		bottom: 8px;
+		width: 280px;
+		padding: 8px 15px;
+		.scroll-y();
 	}
 	.contact-panel{
+		margin-top: 15px;
+	}
+	.tags-panel{
 		margin-top: 15px;
 	}
 }

@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import Paper from 'material-ui/Paper';
+import SearchBar from 'components/SearchBar';
 import IDCard from 'components/IDCard';
 import ContactPanel from 'components/IDCard/ContactPanel.js';
+import TagsPanel from 'containers/TagsPanel';
+import BlogCard from './BlogCard.js';
 import { fetchBlogs, fetchTags} from 'actions';
 import styles from './styles.less';
 
@@ -16,15 +19,32 @@ class BlogList extends Component {
 		dispatch(fetchTags())
 	}
 
+	handleSearch = (keyword) => {
+		const { dispatch } = this.props;
+		dispatch(fetchBlogs(keyword));
+	}
+
 	render() {
+		const { blogs } = this.props;
+
+		let blogList = blogs.map((blog) => {
+			return (
+				<BlogCard key={blog.id} id={blog.id} title={blog.title} content={blog.content} />
+			)
+		});
+
 		return (
 			<div className="blog-list-container">
-				<Paper className="blog-list">
-
+				<Paper className="blog-panel">
+					<SearchBar onSearch={ this.handleSearch }/>
+					<div className="list">
+						{blogList}
+					</div>
 				</Paper>
 				<div className="action-panel">
 					<IDCard />
 					<ContactPanel />
+					<TagsPanel />
 				</div>
 			</div>
 		)
