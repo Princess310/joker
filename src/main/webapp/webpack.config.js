@@ -5,6 +5,7 @@ const NODE_ENV = process.env.NODE_ENV;
 
 let config = {
 	entry: {
+		app: './app.js',
 		admin: './admin.js'
 	},
 	output: {
