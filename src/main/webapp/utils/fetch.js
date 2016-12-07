@@ -25,14 +25,16 @@ const fetchDao = {
 		return this.request("DELETE", url, params);
 	},
 
-	request: function(method, u, params){
+	doUploadFile: function(url, params){
+		return this.request("POST", url, params, true);
+	},
+
+	request: function(method, u, params, file){
 		const self = this;
 		let url = new URL(u, window.location.href);
 		let config = {
 			method: method,
-			headers: {
-				"Content-Type": "application/json"
-			},
+			headers: {},
 			credentials: "same-origin"
 		};
 
@@ -46,8 +48,14 @@ const fetchDao = {
 			Object.keys(params).forEach(key => payload.push(key + "=" + params[key]));
 			config.body = payload.join("&");
 
-			// change the Content-Type for mime
-			config.headers["Content-Type"] = "application/x-www-form-urlencoded";
+			if(file){
+				let formData = new FormData();
+				formData.append("file", params.file);
+				config.body = formData;
+			}else {
+				// change the Content-Type for mime
+				config.headers["Content-Type"] = "application/x-www-form-urlencoded;charset=utf-8";
+			}
 		}
 
 		return new Promise(function (resolve, reject) {

@@ -244,3 +244,17 @@ export const updateTag = (id, name, color) => {
 		}).then(response => dispatch(alterTag(response.result)));
 	}
 }
+
+/**
+ * File Actions
+ * prince 2016/12/7
+ */
+
+export const uploadFile = (file) => {
+	if (typeof file === "undefined") { return false }
+	return dispatch => {
+		return fetch.doUploadFile('uploadFile', {
+			file: file
+		});
+	}
+}

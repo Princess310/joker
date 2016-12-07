@@ -7,7 +7,7 @@ import FlatButton from 'material-ui/FlatButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import { fetchBlogs, createBlog, deleteBlogs, updateBlog, fetchTags} from 'actions';
+import { fetchBlogs, createBlog, deleteBlogs, updateBlog, fetchTags, uploadFile} from 'actions';
 import SumEditor from 'components/SumEditor';
 import styles from './styles.less';
 
@@ -23,7 +23,9 @@ class Blog extends Component {
 			content: "",
 			titleError: "",
 			currentAction: "add",
-			keyword: ""
+			keyword: "",
+			imgSrc: "",
+			attachmentId: 0
 		}
 	}
 
@@ -161,6 +163,31 @@ class Blog extends Component {
 		dispatch(fetchBlogs(keyword))
 	}
 
+	handleChangeImage = (e) => {
+		const { dispatch } = this.props;
+		const file = e.target.files[0];
+		const self = this;
+
+		if(file){
+			dispatch(uploadFile(file)).then((response) => {
+				const result = response.result;
+				const id = result.id;
+
+				self.setState({
+					imgSrc: 'attachment?id=' + id,
+					attachmentId: id
+				});
+			});
+		}
+	}
+
+	handleClearImg = (e) => {
+		this.setState({
+			imgSrc: '',
+			attachmentId: 0
+		});
+	}
+
 	render() {
 		const { blogs, tags } = this.props;
 
@@ -272,6 +299,13 @@ class Blog extends Component {
 					>
 						{tagsList}
 					</SelectField>
+					<input type="file" accept="image/jpg,image/jpeg,image/png,image/gif" onChange={this.handleChangeImage} />
+					{this.state.imgSrc != "" && (
+						<div className="preview-img-wrapper">
+							<img className="preview-img" src={this.state.imgSrc} />
+							<i className="mdi mdi-close-circle clear-img" onTouchTap={this.handleClearImg}></i>
+						</div>
+					)}
 					<SumEditor onChange={this.handleEditorChange} value={this.state.content}/>
 				</Dialog>
 			</div>

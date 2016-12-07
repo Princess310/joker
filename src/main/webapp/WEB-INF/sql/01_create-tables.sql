@@ -1,5 +1,5 @@
-﻿-- quick EMPTY : truncate "user", blog, tag, blogtag, type, message RESTART IDENTITY cascade;
--- quick DROP  : drop table  "user",blog, tag, blogtag, type, message;
+﻿-- quick EMPTY : truncate "user", blog, tag, blogtag, type, message, attachment RESTART IDENTITY cascade;
+-- quick DROP  : drop table  "user",blog, tag, blogtag, type, message, attachment;
 
 -- --------- user --------- --
 CREATE TABLE "user"
@@ -25,6 +25,8 @@ CREATE TABLE "blog"
 	"viewCount" bigint,
 	"isTop" boolean,
 	"userId" bigint,
+	"picFileId" bigint,
+	"aduioFileId" bigint,
 	"ctime" timestamp without time zone,
 	"utime" timestamp without time zone,
 	CONSTRAINT blog_pkey PRIMARY KEY (id)
@@ -81,3 +83,16 @@ CREATE TABLE "message"
 	CONSTRAINT message_pkey PRIMARY KEY (id)
 );
 -- --------- /message --------- --
+
+-- --------- attachment --------- --
+CREATE TABLE attachment
+(
+	id bigserial NOT NULL,
+	"name" character varying(128),
+	"ext" character varying(32),
+	"path" character varying(256),
+	"ctime" timestamp without time zone,
+	"utime" timestamp without time zone,
+	CONSTRAINT attachment_pkey PRIMARY KEY (id)
+);
+-- --------- /attachment --------- --
