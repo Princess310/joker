@@ -19,19 +19,24 @@ class Blog extends Component {
 			openDialog: false,
 			id: 0,
 			title: "",
+			breif: "",
 			tagId: 0,
 			content: "",
 			titleError: "",
+			breifError: "",
 			currentAction: "add",
 			keyword: "",
 			imgSrc: "",
-			attachmentId: 0
-		}
+			picFileId: 0,
+			audioSrc: "",
+			audioFileId: 0
+
+		};
 	}
 
 	componentDidMount() {
 		const { dispatch } = this.props;
-		dispatch(fetchBlogs())
+		dispatch(fetchBlogs());
 		dispatch(fetchTags()).then((result) => {
 			const tags = result.tags;
 			if(tags.length > 0){
@@ -52,6 +57,7 @@ class Blog extends Component {
 		this.setState({
 			openDialog: false,
 			title: "",
+			breif: "",
 			content: ""
 		});
 	}
@@ -72,6 +78,13 @@ class Blog extends Component {
 		const value = e.target.value;
 		this.setState({
 			title: value
+		});
+	}
+
+	handleChangeBreif(e) {
+		const value = e.target.value;
+		this.setState({
+			breif: value
 		});
 	}
 
@@ -118,14 +131,31 @@ class Blog extends Component {
 		this.setState({
 			id: blog.id,
 			title: blog.title,
+			breif: blog.breif,
+			picFileId: blog.picFileId,
+			audioFileId: blog.audioFileId,
 			content: blog.content,
 			currentAction: "update"
 		});
+
+		// set img src
+		if(blog.picFileId !== 0){
+			this.setState({
+				imgSrc: 'attachment?id=' + blog.picFileId
+			});
+		}
+
+		// set audio src
+		if(blog.audioFileId !== 0){
+			this.setState({
+				audioSrc: 'attachment?id=' + blog.audioFileId
+			});
+		}
 		this.handleOpenDialog();
 	}
 
 	handleSaveBlog(e) {
-		const { id, title, tagId, content, currentAction} = this.state;
+		const { id, title, breif, tagId, picFileId, audioFileId, content, currentAction} = this.state;
 		const { dispatch } = this.props;
 		const self = this;
 
@@ -137,12 +167,19 @@ class Blog extends Component {
 			return false;
 		}
 
+		if(breif.trim() === ""){
+			this.setState({
+				breifError: "breif can not be empty!"
+			});
+			return false;
+		}
+
 		if(currentAction === "add"){
-			dispatch(createBlog(title, tagId, content)).then(() => {
+			dispatch(createBlog(title, breif, tagId, picFileId, audioFileId, content)).then(() => {
 				self.handleCloseDialog();
 			});
 		}else {
-			dispatch(updateBlog(id, title, content, tagId)).then(() => {
+			dispatch(updateBlog(id, title, breif, content, tagId, picFileId, audioFileId)).then(() => {
 				self.handleCloseDialog();
 			});
 		}
@@ -175,7 +212,25 @@ class Blog extends Component {
 
 				self.setState({
 					imgSrc: 'attachment?id=' + id,
-					attachmentId: id
+					picFileId: id
+				});
+			});
+		}
+	}
+
+	handleChangeAudio = (e) => {
+		const { dispatch } = this.props;
+		const file = e.target.files[0];
+		const self = this;
+
+		if(file){
+			dispatch(uploadFile(file)).then((response) => {
+				const result = response.result;
+				const id = result.id;
+
+				self.setState({
+					audioSrc: 'attachment?id=' + id,
+					audioFileId: id
 				});
 			});
 		}
@@ -184,7 +239,14 @@ class Blog extends Component {
 	handleClearImg = (e) => {
 		this.setState({
 			imgSrc: '',
-			attachmentId: 0
+			picFileId: 0
+		});
+	}
+
+	handleClearAudio = (e) => {
+		this.setState({
+			audioSrc: '',
+			audioFileId: 0
 		});
 	}
 
@@ -282,10 +344,19 @@ class Blog extends Component {
 				>
 					<TextField
 						hintText="Blog Title"
-						floatingLabelText="blog"
+						floatingLabelText="Blog"
 						errorText={this.state.titleError}
 						value={this.state.title}
 						onChange={(e) => this.handleChangeTitle(e)}
+						onKeyUp={(e) => { e.which === 13 && this.handleSaveBlog(e) }}
+					/>
+					<br />
+					<TextField
+						hintText="Blog Breif"
+						floatingLabelText="Breif"
+						errorText={this.state.breifError}
+						value={this.state.breif}
+						onChange={(e) => this.handleChangeBreif(e)}
 						onKeyUp={(e) => { e.which === 13 && this.handleSaveBlog(e) }}
 					/>
 					<br />
@@ -304,6 +375,13 @@ class Blog extends Component {
 						<div className="preview-img-wrapper">
 							<img className="preview-img" src={this.state.imgSrc} />
 							<i className="mdi mdi-close-circle clear-img" onTouchTap={this.handleClearImg}></i>
+						</div>
+					)}
+					<input type="file" accept="audio/*" onChange={this.handleChangeAudio} />
+					{this.state.audioSrc != "" && (
+						<div className="preview-audio-wrapper">
+							<audio src={this.state.audioSrc} controls="controls"/>
+							<i className="mdi mdi-close-circle clear-audio" onTouchTap={this.handleClearAudio}></i>
 						</div>
 					)}
 					<SumEditor onChange={this.handleEditorChange} value={this.state.content}/>

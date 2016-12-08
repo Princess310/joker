@@ -20,13 +20,14 @@ CREATE TABLE "blog"
 (
 	id bigserial NOT NULL,
 	title character varying(128),
+	breif character varying(128),
 	content text,
 	"typeId" bigint,
 	"viewCount" bigint,
 	"isTop" boolean,
 	"userId" bigint,
 	"picFileId" bigint,
-	"aduioFileId" bigint,
+	"audioFileId" bigint,
 	"ctime" timestamp without time zone,
 	"utime" timestamp without time zone,
 	CONSTRAINT blog_pkey PRIMARY KEY (id)

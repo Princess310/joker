@@ -33,8 +33,10 @@ public class BlogWebHandler {
     }
 
     @WebPost("/createBlog")
-    public WebResponse createBlog(@WebUser User user, @WebParam("title") String title, @WebParam("tagId") Long tagId, @WebParam("content") String content){
-        Blog blog  = blogDao.createBlog(user, title, tagId, content);
+    public WebResponse createBlog(@WebUser User user, @WebParam("title") String title, @WebParam("breif") String breif ,
+                                  @WebParam("tagId") Long tagId, @WebParam("picFileId") Long picFileId, @WebParam("audioFileId") Long audioFileId,
+                                  @WebParam("content") String content){
+        Blog blog  = blogDao.createBlog(user, title, breif, tagId, picFileId, audioFileId, content);
 
         return webResponseBuilder.success(blog);
     }
@@ -46,8 +48,10 @@ public class BlogWebHandler {
     }
 
     @WebPut("/updateBlog")
-    public  WebResponse updateBlog(@WebUser User user, @WebParam("id") Long id, @WebParam("title") String title, @WebParam("content") String content, @WebParam("tagId") Long tagId){
-        Blog blog = blogDao.updateBlog(user, id, title, content, tagId);
+    public  WebResponse updateBlog(@WebUser User user, @WebParam("id") Long id, @WebParam("title") String title,
+                                   @WebParam("breif") String breif, @WebParam("content") String content, @WebParam("tagId") Long tagId,
+                                   @WebParam("picFileId") Long picFileId, @WebParam("audioFileId") Long audioFileId){
+        Blog blog = blogDao.updateBlog(user, id, title, breif, content, tagId, picFileId, audioFileId);
 
         return webResponseBuilder.success(blog);
     }

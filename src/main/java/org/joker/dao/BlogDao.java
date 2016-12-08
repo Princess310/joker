@@ -26,8 +26,8 @@ public class BlogDao extends BaseDao<Blog,Long> {
         return  daoHelper.list(listSelectBuilder(user,condition,page,pageSize,orderBy));
     }
 
-    public Blog createBlog(User user, String title, Long tagId, String content){
-        Blog blog = new Blog(title, content, user.getId(), LocalDateTime.now(), LocalDateTime.now());
+    public Blog createBlog(User user, String title, String breif, Long tagId, Long picFileId, Long audioFileId, String content){
+        Blog blog = new Blog(title, breif, content, user.getId(), picFileId, audioFileId, LocalDateTime.now(), LocalDateTime.now());
         Long id = create(null, blog);
 
         // BlogTag
@@ -54,10 +54,13 @@ public class BlogDao extends BaseDao<Blog,Long> {
         }
     }
 
-    public Blog updateBlog(User user, Long id, String title, String content, Long tagId){
+    public Blog updateBlog(User user, Long id, String title, String breif, String content, Long tagId, Long picFileId, Long audioFileId){
         Blog blog = daoHelper.first(Query.select(entityClass).where("id", id)).orElse(null);
         blog.setTitle(title);
+        blog.setBreif(breif);
         blog.setContent(content);
+        blog.setPicFileId(picFileId);
+        blog.setAudioFileId(audioFileId);
         blog.setUtime(LocalDateTime.now());
         update(user, blog, id);
 

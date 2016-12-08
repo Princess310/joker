@@ -5,7 +5,10 @@ import java.time.LocalDateTime;
 public class Blog extends BaseEntity<Long> {
     private String title;
     private String content;
+    private String breif;
     private Long typeId;
+    private Long picFileId;
+    private Long audioFileId;
     private Long viewCount;
     private boolean isTop;
     private Long userId;
@@ -14,10 +17,13 @@ public class Blog extends BaseEntity<Long> {
 
     public Blog(){}
 
-    public Blog(String title, String content, Long userId, LocalDateTime ctime, LocalDateTime utime) {
+    public Blog(String title, String breif,  String content, Long userId, Long picFileId, Long audioFileId, LocalDateTime ctime, LocalDateTime utime) {
         this.title = title;
+        this.breif = breif;
         this.content = content;
         this.userId = userId;
+        this.picFileId = picFileId;
+        this.audioFileId = audioFileId;
         this.ctime = ctime;
         this.utime = utime;
     }
@@ -84,5 +90,29 @@ public class Blog extends BaseEntity<Long> {
 
     public void setUtime(LocalDateTime utime) {
         this.utime = utime;
+    }
+
+    public String getBreif() {
+        return breif;
+    }
+
+    public void setBreif(String breif) {
+        this.breif = breif;
+    }
+
+    public Long getPicFileId() {
+        return picFileId;
+    }
+
+    public void setPicFileId(Long picFileId) {
+        this.picFileId = picFileId;
+    }
+
+    public Long getAudioFileId() {
+        return audioFileId;
+    }
+
+    public void setAudioFileId(Long audioFileId) {
+        this.audioFileId = audioFileId;
     }
 }

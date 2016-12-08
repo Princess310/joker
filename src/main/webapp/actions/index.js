@@ -135,11 +135,14 @@ export const fetchBlogs = (keyword) => {
 	}
 }
 
-export const createBlog = (title, tagId, content) => {
+export const createBlog = (title, breif, tagId, picFileId, audioFileId, content) => {
 	return dispatch => {
 		return fetch.doPost('createBlog', {
 			title: title,
+			breif: breif,
 			tagId: tagId,
+			picFileId: picFileId,
+			audioFileId: audioFileId,
 			content: content
 		}).then(response => dispatch(addBlog(response.result)));
 	}
@@ -153,13 +156,16 @@ export const deleteBlogs = (ids) => {
 	}
 }
 
-export const updateBlog = (id, title, content, tagId) => {
+export const updateBlog = (id, title, breif, content, tagId, picFileId, audioFileId) => {
 	return dispatch => {
 		return fetch.doPut('updateBlog', {
 			id: id,
 			title: title,
+			breif: breif,
 			content: content,
-			tagId: tagId
+			tagId: tagId,
+			picFileId: picFileId,
+			audioFileId: audioFileId
 		}).then(response => dispatch(alterBlog(response.result)));
 	}
 }
