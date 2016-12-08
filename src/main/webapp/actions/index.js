@@ -91,6 +91,7 @@ export const RECEIVE_BLOGS = 'RECEIVE_BLOGS';
 export const ADD_BLOG = 'ADD_BLOG';
 export const DELETE_BLOGS = 'DELETE_BLOGS';
 export const UPDATE_BLOG = 'UPDATE_BLOG';
+export const REQUEST_BLOG_INFO = 'REQUEST_BLOG_INFO';
 
 const requestBlogs = () => {
 	return {
@@ -102,6 +103,13 @@ const receiveBlogs = (blogs) => {
 	return {
 		type: RECEIVE_BLOGS,
 		blogs: blogs
+	}
+}
+
+const receiveBlogInfo = (result) => {
+	return {
+		type: REQUEST_BLOG_INFO,
+		result: result
 	}
 }
 
@@ -132,6 +140,13 @@ export const fetchBlogs = (keyword) => {
 		dispatch(requestBlogs())
 		return fetch.doGet('getBlogList', {keyword: keyword})
 			.then(response => dispatch(receiveBlogs(response.result)))
+	}
+}
+
+export const fetchBlogInfo = (id) => {
+	return dispatch => {
+		return fetch.doGet('getBlogDetail', {id: id})
+			.then(response => dispatch(receiveBlogInfo(response.result)))
 	}
 }
 

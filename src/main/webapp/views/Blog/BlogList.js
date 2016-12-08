@@ -5,7 +5,7 @@ import IDCard from 'components/IDCard';
 import ContactPanel from 'components/IDCard/ContactPanel.js';
 import TagsPanel from 'containers/TagsPanel';
 import BlogCard from './BlogCard.js';
-import { fetchBlogs, fetchTags} from 'actions';
+import { fetchBlogs, fetchTags } from 'actions';
 import styles from './styles.less';
 
 class BlogList extends Component {
@@ -28,13 +28,15 @@ class BlogList extends Component {
 		const { blogs } = this.props;
 
 		let blogList = blogs.map((blog) => {
+			let pic = "";
+			if(blog.picFileId){ pic =  "attachment?id=" + blog.picFileId};
 			return (
-				<BlogCard key={blog.id} id={blog.id} title={blog.title} content={blog.content} />
+				<BlogCard key={blog.id} id={blog.id} title={blog.title} pic={pic} breif={blog.breif} />
 			)
 		});
 
 		return (
-			<div className="blog-list-container">
+			<div className="blog-container">
 				<Paper className="blog-panel">
 					<SearchBar onSearch={ this.handleSearch }/>
 					<div className="list">

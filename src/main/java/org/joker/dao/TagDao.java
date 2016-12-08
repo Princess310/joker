@@ -1,8 +1,11 @@
 package org.joker.dao;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.j8ql.query.Condition;
 import org.j8ql.query.Query;
+import org.joker.entity.Blog;
+import org.joker.entity.BlogTag;
 import org.joker.entity.Tag;
 import org.joker.entity.User;
 
@@ -11,6 +14,9 @@ import java.util.List;
 
 @Singleton
 public class TagDao extends BaseDao<Tag,Long> {
+
+    @Inject
+    private BlogTagDao blogTagDao;
 
     public List<Tag> getTagList (User user, String keyword, int page, int pageSize, String... orderBy){
         Condition condition = null;
@@ -59,6 +65,13 @@ public class TagDao extends BaseDao<Tag,Long> {
         tag.setUtime(LocalDateTime.now());
 
         update(user, tag, id);
+        return tag;
+    }
+
+    public  Tag getTagByBlog(User user, Long blogId){
+        BlogTag blogTag = daoHelper.first(Query.select(BlogTag.class).where("blogId", blogId)).orElse(null);
+        Tag tag = daoHelper.first(Query.select(entityClass).where("id", blogTag.getTagId())).orElse(null);
+
         return tag;
     }
 }

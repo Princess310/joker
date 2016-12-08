@@ -9,10 +9,13 @@ import com.britesnow.snow.web.rest.annotation.WebPut;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.joker.dao.BlogDao;
+import org.joker.dao.TagDao;
 import org.joker.entity.Blog;
+import org.joker.entity.Tag;
 import org.joker.entity.User;
 import org.joker.perf.annotation.ToMonitor;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Singleton
@@ -23,6 +26,9 @@ public class BlogWebHandler {
     private BlogDao blogDao;
 
     @Inject
+    private TagDao tagDao;
+
+    @Inject
     private WebResponseBuilder webResponseBuilder;
 
     @WebGet("/getBlogList")
@@ -30,6 +36,18 @@ public class BlogWebHandler {
         List<Blog> blogs = blogDao.getBlogList(user,keyword,0,100);
 
         return webResponseBuilder.success(blogs);
+    }
+
+    @WebGet("/getBlogDetail")
+    public WebResponse getBlogDetail(@WebUser User user, @WebParam("id") Long id){
+        Blog blog = blogDao.get(user ,id).orElse(null);
+        Tag tag = tagDao.getTagByBlog(user, id);
+
+        HashMap result = new HashMap();
+        result.put("blog", blog);
+        result.put("tag", tag);
+
+        return webResponseBuilder.success(result);
     }
 
     @WebPost("/createBlog")

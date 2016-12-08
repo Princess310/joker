@@ -23,7 +23,7 @@ CREATE TABLE "blog"
 	breif character varying(128),
 	content text,
 	"typeId" bigint,
-	"viewCount" bigint,
+	"viewCount" bigint DEFAULT 0,
 	"isTop" boolean,
 	"userId" bigint,
 	"picFileId" bigint,
