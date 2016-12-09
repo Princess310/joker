@@ -42,6 +42,7 @@
 					height: 48px;
 					font-size: 24px;
 					line-height: 48px;
+					.ellipsis();
 					border-bottom: 1px rgb(224, 224, 224) solid;
 				}
 				.subinfo{
@@ -132,6 +133,29 @@
 			right: 0;
 			&:hover{
 				cursor: pointer;
+			}
+		}
+	}
+}
+
+@media only screen and (max-device-width : 1080px) {
+	.blog-container{
+		width: 100%;
+		.blog-panel{
+			left: 8px;
+			right: 8px;
+			width: auto;
+		}
+		.action-panel{
+			display: none;
+			left: 0;
+			width: auto;
+			&:before{
+				content: "";
+				background-color: @black-deep;
+				opacity: .5;
+				.fitparent();
+				z-index: 1;
 			}
 		}
 	}
