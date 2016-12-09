@@ -134,12 +134,15 @@ const alterBlog = (blog) => {
 	}
 }
 
-export const fetchBlogs = (keyword) => {
+export const fetchBlogs = (keyword, tagId) => {
 	if (typeof keyword === "undefined") { keyword = "" }
+		if (typeof tagId === "undefined") { tagId = 0 }
 	return dispatch => {
 		dispatch(requestBlogs())
-		return fetch.doGet('getBlogList', {keyword: keyword})
-			.then(response => dispatch(receiveBlogs(response.result)))
+		return fetch.doGet('getBlogList', {
+			keyword: keyword,
+			tagId: tagId
+		}).then(response => dispatch(receiveBlogs(response.result)))
 	}
 }
 

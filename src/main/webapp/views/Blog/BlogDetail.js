@@ -39,7 +39,10 @@ class BlogDetail extends Component {
 							</Paper>
 							<Paper className="content-wrapper">
 								<img src={ 'attachment?id=' + blog.picFileId } className="blog-pic" />
-								<article className="content" dangerouslySetInnerHTML={{__html: blog.content}}></article>
+								<section className="content">
+									<article className="breif">{blog.breif}</article>
+									<article dangerouslySetInnerHTML={{__html: blog.content}}></article>
+								</section>
 							</Paper>
 						</div>
 					) }

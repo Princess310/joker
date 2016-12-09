@@ -1,7 +1,21 @@
 @import '../../styles/mixins.less';
 
 .tags-panel{
+	position: relative;
 	.mdi{
 		font-size: 24px;
+	}
+	.clear-tag{
+		position: absolute;
+		top: 0;
+		right: 0;
+		height: 48px;
+		line-height: 48px;
+		padding: 0 16px;
+		color: @color-txt-lighter;
+		&:hover{
+			cursor: pointer;
+			color: @color-Cyan-base;
+		}
 	}
 }

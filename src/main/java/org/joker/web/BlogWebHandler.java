@@ -32,8 +32,8 @@ public class BlogWebHandler {
     private WebResponseBuilder webResponseBuilder;
 
     @WebGet("/getBlogList")
-    public WebResponse getBlogList(@WebUser User user, @WebParam("keyword") String keyword){
-        List<Blog> blogs = blogDao.getBlogList(user,keyword,0,100);
+    public WebResponse getBlogList(@WebUser User user, @WebParam("keyword") String keyword, @WebParam("tagId") Long tagId){
+        List<Blog> blogs = blogDao.getBlogList(user, keyword, tagId, 0,100);
 
         return webResponseBuilder.success(blogs);
     }

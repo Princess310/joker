@@ -4,6 +4,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.j8ql.DB;
 import org.j8ql.DBBuilder;
 import org.j8ql.Runner;
+import org.j8ql.RunnerProxy;
 import org.j8ql.query.*;
 
 import javax.inject.Inject;
@@ -37,6 +38,8 @@ public class DaoHelper {
 
     DB db;
 	private ComboPooledDataSource cpds;
+
+	ThreadLocal<SessionRunner> sessionRunnerHolder = new ThreadLocal<>();
 
     @Inject
     public DaoHelper(@Named("db.url") String url, @Named("db.user") String user, @Named("db.pwd") String pwd) {
@@ -115,6 +118,12 @@ public class DaoHelper {
 	}
 	// --------- /SelectQuery --------- //
 
+	public Runner openRunner(){
+		// return the sessionRunner or open a new one if none in the session
+		Runner runner = sessionRunnerHolder.get();
+		return (runner != null)?runner:db.openRunner();
+	}
+
 
 	public int executeUpdate(String sql,Object... values) {
 		try (Runner runner = db.openRunner()){
@@ -123,4 +132,21 @@ public class DaoHelper {
 	}
 
 
+}
+
+class SessionRunner extends RunnerProxy {
+
+
+	public SessionRunner(Runner runner) {
+		super(runner);
+	}
+
+	@Override
+	public void close() {
+		// Do nothing, because it is a session runner.
+	}
+
+	public void closeSession(){
+		runner.close();
+	}
 }

@@ -7,7 +7,7 @@ const date = {
 		const minute = obj.minute;
 		const second = obj.second;
 
-		return year + '-' + month + '-' + day + ' ' + hour + ':' + minute;
+		return `${year}-${month}-${day} ${hour}:${minute}`;
 	}
 }
 

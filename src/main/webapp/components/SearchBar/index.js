@@ -32,6 +32,7 @@ class SearchBar extends Component {
 					fullWidth={true}
 					value={this.state.value}
 					onChange={this.handleValueChange}
+					onKeyUp={(e) => { e.which === 13 && this.handleSearch(e)}}
 				/>
 				<RaisedButton className="search-btn" label="Search" primary={true} onTouchTap={this.handleSearch}/>
 			</Paper>
