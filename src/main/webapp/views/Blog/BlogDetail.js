@@ -34,6 +34,10 @@ class BlogDetail extends Component {
 									<div className="tag">
 										<span className="mdi mdi-tag-heart" style={{ "color": tag.color }}></span>
 										<span>{tag.name}</span>
+										<span className="view-count">
+											<i className="mdi mdi-fire"></i>
+											{blog.viewCount}
+										</span>
 									</div>
 								</section>
 							</Paper>
@@ -49,7 +53,7 @@ class BlogDetail extends Component {
 				</Paper>
 				<div className="action-panel">
 					<IDCard />
-					{ (blog && blog.audioFileId) && <AudioBar url={ 'attachment?id=' + blog.audioFileId } autoPlay={true} /> }
+					{ (blog && blog.audioFileId > 0) && <AudioBar url={ 'attachment?id=' + blog.audioFileId } autoPlay={true} /> }
 				</div>
 			</div>
 		)

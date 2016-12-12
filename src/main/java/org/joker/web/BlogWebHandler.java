@@ -43,6 +43,13 @@ public class BlogWebHandler {
         Blog blog = blogDao.get(user ,id).orElse(null);
         Tag tag = tagDao.getTagByBlog(user, id);
 
+        // update view count
+        Long viewCount = blog.getViewCount();
+        viewCount++;
+        blog.setViewCount(viewCount);
+        blogDao.update(user, blog, blog.getId());
+
+
         HashMap result = new HashMap();
         result.put("blog", blog);
         result.put("tag", tag);
