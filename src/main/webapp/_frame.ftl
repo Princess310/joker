@@ -16,11 +16,16 @@
 			user = {
 				id: ${_r.user.id},
 				userName: "${_r.user.username}",
+                avatar: "${_r.user.avatar!('')}",
 				admin: ${_r.user.admin?string('true', 'false')}
 			};
 		[#else]
 			user = null;
 		[/#if]
+
+        window.addEventListener('message',function(event) {
+            window.location.reload(true);
+        },false);
 	</script>
 </head>
 

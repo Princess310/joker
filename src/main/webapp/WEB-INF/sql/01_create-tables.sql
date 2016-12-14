@@ -8,6 +8,7 @@ CREATE TABLE "user"
 	username character varying(128),
 	"fullName" character varying(128),
 	pwd character varying(256),
+	"avatar" character varying(256),
 	admin boolean DEFAULT false,
 	CONSTRAINT user_pkey PRIMARY KEY (id)
 );

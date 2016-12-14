@@ -9,14 +9,19 @@ import com.britesnow.snow.web.auth.AuthToken;
 import com.britesnow.snow.web.param.annotation.WebParam;
 import com.britesnow.snow.web.rest.annotation.WebGet;
 import com.britesnow.snow.web.rest.annotation.WebPost;
+import com.github.scribejava.core.model.Response;
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import com.google.common.hash.Hashing;
 import com.google.inject.Inject;
+import net.sf.json.JSONObject;
 import org.joker.AppException;
 import org.joker.ErrorEnum;
 import org.joker.dao.UserDao;
 import org.joker.entity.User;
+import org.joker.service.GithubService;
+
+import java.io.IOException;
 
 
 /**
@@ -63,6 +68,9 @@ public class AppAuthService implements AuthRequest {
 	@Inject
 	private WebResponseBuilder webResponseBuilder;
 
+	@Inject
+	GithubService githubService;
+
 	// --------- AuthRequest Implementation --------- //
 	/**
 	 * <p>When Binding a AuthRequest implementation at the AppConfig Guice Module, all request will go
@@ -80,6 +88,29 @@ public class AppAuthService implements AuthRequest {
 	public AuthToken<User> authRequest(RequestContext rc) {
 		WebRequestType wrt = rc.getWebRequestType();
 		AuthToken authToken = null;
+
+		// do third auth login logic
+		if(rc.getPathInfo().equals("/github_callback")){
+			String code = rc.getParam("code");
+			if(code != null){
+				Response response = githubService.getToken(code);
+				try {
+					JSONObject  userInfo = JSONObject.fromObject(response.getBody());
+					String username = (String) userInfo.get("login");
+					String avatar = (String) userInfo.get("avatar_url");
+					User user = userDao.getByUsername(username);
+
+					if(user == null){
+						User createUser = userDao.createUser(username, "", avatar);
+					}
+
+					login(username, "", rc, "1");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
 		switch(wrt){
 			// All the dynamic resources, we need to auth
 			case WEB_RESOURCE:
@@ -121,13 +152,13 @@ public class AppAuthService implements AuthRequest {
 			throw new AppException(Error.CANNOT_REGISTER_USERNAME_ALREADY_EXIST);
 		}
 
-		userDao.createUser(username,pwd);
+		userDao.createUser(username, pwd, "");
 
-		return login(username,pwd,rc);
+		return login(username,pwd,rc, null);
 	}
 
 	@WebPost("/login")
-	public WebResponse login(@WebParam("username")String username, @WebParam("pwd")String pwd, RequestContext rc){
+	public WebResponse login(@WebParam("username")String username, @WebParam("pwd")String pwd, RequestContext rc,@WebParam("credentialId") String credentialId){
 		User user = userDao.getByUsername(username);
 
 		// check if user exist
@@ -135,9 +166,10 @@ public class AppAuthService implements AuthRequest {
 			throw new AppException(Error.WRONG_CREDENTIAL);
 		}
 		// check if right password
-		String password = user.getPwd();
-		if (Strings.isNullOrEmpty(pwd) || !pwd.equals(user.getPwd())){
-			throw new AppException(Error.WRONG_CREDENTIAL);
+		if(credentialId == null){
+			if (Strings.isNullOrEmpty(pwd) || !pwd.equals(user.getPwd())){
+				throw new AppException(Error.WRONG_CREDENTIAL);
+			}
 		}
 
 		// if nothing fail, build utoken, and set cookies

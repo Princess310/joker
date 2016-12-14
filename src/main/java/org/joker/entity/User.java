@@ -5,6 +5,7 @@ public class User extends BaseEntity<Long> {
 
     private String username;
     private String pwd;
+    private String avatar;
     private String firstName;
     private String lastName;
     private String photoUrl;
@@ -79,8 +80,15 @@ public class User extends BaseEntity<Long> {
     public void setAdmin(Boolean admin) {
         this.admin = admin;
     }
-    
-    
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     // --------- /Persistent Properties --------- //
     
     public String toString () {

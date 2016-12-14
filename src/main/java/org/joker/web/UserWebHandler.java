@@ -36,7 +36,7 @@ public class UserWebHandler {
 
     @WebPost("/createUser")
     public WebResponse createUser(@WebParam("username") String username, @WebParam("pwd") String password){
-        User user = userDao.createUser(username, password);
+        User user = userDao.createUser(username, password, "");
         return webResponseBuilder.success(user);
     }
 

@@ -32,14 +32,15 @@ public class UserDao extends BaseDao<User,Long> {
 	 * @param password
 	 * @return
 	 */
-	public User createUser(String username, String password){
-		 User user = new User();
-		 user.setUsername(username);
-		 user.setPwd(password);
-		 // for User, we can create new ones without an existing User
-		 Long id = create(null, user);
+	public User createUser(String username, String password, String avatar){
+		User user = new User();
+		user.setUsername(username);
+		user.setPwd(password);
+		user.setAvatar(avatar);
+		// for User, we can create new ones without an existing User
+		Long id = create(null, user);
 
-		 return get(null,id).get();
+		return get(null,id).get();
 	}
 
 	public void deleteUsers(String userIds){

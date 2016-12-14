@@ -153,6 +153,14 @@
 			<version>1.2.0</version>
 		</dependency>
 		<!-- /for the DAO Registry -->
+
+		<!-- scribejava -->
+		<dependency>
+			<groupId>com.github.scribejava</groupId>
+			<artifactId>scribejava-apis</artifactId>
+			<version>3.4.0</version>
+		</dependency>
+		<!-- /scribejava -->
 		
 	</dependencies>
 	
