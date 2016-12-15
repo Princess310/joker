@@ -20,6 +20,7 @@ import org.joker.ErrorEnum;
 import org.joker.dao.UserDao;
 import org.joker.entity.User;
 import org.joker.service.GithubService;
+import org.joker.service.GoogleService;
 
 import java.io.IOException;
 
@@ -71,6 +72,9 @@ public class AppAuthService implements AuthRequest {
 	@Inject
 	GithubService githubService;
 
+	@Inject
+	GoogleService googleService;
+
 	// --------- AuthRequest Implementation --------- //
 	/**
 	 * <p>When Binding a AuthRequest implementation at the AppConfig Guice Module, all request will go
@@ -105,6 +109,26 @@ public class AppAuthService implements AuthRequest {
 					}
 
 					login(username, "", rc, "1");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}else if(rc.getPathInfo().equals("/google_callback")){
+			String code = rc.getParam("code");
+			if(code != null){
+				Response response = googleService.getToken(code);
+				try {
+					System.out.println(response);
+					JSONObject  userInfo = JSONObject.fromObject(response.getBody());
+					/*String username = (String) userInfo.get("login");
+					String avatar = (String) userInfo.get("avatar_url");
+					User user = userDao.getByUsername(username);
+
+					if(user == null){
+						User createUser = userDao.createUser(username, "", avatar);
+					}
+
+					login(username, "", rc, "1");*/
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

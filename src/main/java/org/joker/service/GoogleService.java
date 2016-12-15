@@ -1,8 +1,6 @@
 package org.joker.service;
 
-import java.io.IOException;
-import java.util.Random;
-import com.github.scribejava.apis.GitHubApi;
+import com.github.scribejava.apis.GoogleApi20;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.github.scribejava.core.model.OAuthRequest;
@@ -11,20 +9,34 @@ import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import com.google.inject.Singleton;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Random;
+
 @Singleton
-public class GithubService {
-    private static final String NETWORK_NAME = "GitHub";
-    private static final String PROTECTED_RESOURCE_URL = "https://api.github.com/user";
-    final private String clientId = "913e1b01909e741758de";
-    final private String clientSecret = "a792a015a63b50fbda7914adabf1134d52459fc4";
+public class GoogleService {
+    private static final String NETWORK_NAME = "G+";
+    private static final String PROTECTED_RESOURCE_URL = "https://www.googleapis.com/plus/v1/people/me";
+    final private String clientId = "562136326887-5a5rfdv7bnostsrj2hhdpae90j9h6v73.apps.googleusercontent.com";
+    final private String clientSecret = "m5lCXFqxThSleFfGq8EkOlrv";
     final private String secretState = "secret" + new Random().nextInt(999_999);
     final private OAuth20Service service = new ServiceBuilder()
             .apiKey(clientId)
             .apiSecret(clientSecret)
+            .scope("profile") // replace with desired scope
             .state(secretState)
-            .callback("http://localhost:8080/github_callback")
-            .build(GitHubApi.instance());
-    final private String authorizationUrl = service.getAuthorizationUrl();
+            .callback("http://localhost:8080/google_callback")
+            .build(GoogleApi20.instance());
+    //pass access_type=offline to get refresh token
+    //https://developers.google.com/identity/protocols/OAuth2WebServer#preparing-to-start-the-oauth-20-flow
+    private HashMap<String, String> additionalParams =
+            new HashMap<String, String>() {
+                {
+                    put("access_type", "offline");
+                    put("prompt", "consent");
+                }
+            };
+    final String authorizationUrl = service.getAuthorizationUrl(additionalParams);
 
     public String getAuthURL(){
         return authorizationUrl;
@@ -42,7 +54,6 @@ public class GithubService {
         if(accessToken != null){
             service.signRequest(accessToken, request);
         }
-
         return request.send();
     }
 }
