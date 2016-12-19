@@ -57,6 +57,10 @@ class AppBarMenu extends Component {
 		this.doAuthorize("google");
 	}
 
+	handleAuthorizeLinkedIn = (e) => {
+		this.doAuthorize("linkedIn");
+	}
+
 	doAuthorize(type){
 		if(window.showModalDialog){
 			window.showModalDialog("/authorize?type=" + type);
@@ -103,10 +107,11 @@ class AppBarMenu extends Component {
 								iconStyle={{"color": "#db463c"}}
 								onTouchTap={this.handleAuthorizeGoogle} />
 							<IconButton 
-								iconClassName="mdi mdi-facebook-box" 
-								tooltip="Facebook" 
+								iconClassName="mdi linkedin-box" 
+								tooltip="LinkedIn" 
 								tooltipPosition="top-center"
-								iconStyle={{"color": "#3a5898"}} />
+								iconStyle={{"color": "#0077b5"}}
+								onTouchTap={this.handleAuthorizeLinkedIn} />
 						</div>
 					</div>
 				</Drawer>

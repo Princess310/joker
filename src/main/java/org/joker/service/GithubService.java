@@ -15,16 +15,16 @@ import com.google.inject.Singleton;
 public class GithubService {
     private static final String NETWORK_NAME = "GitHub";
     private static final String PROTECTED_RESOURCE_URL = "https://api.github.com/user";
-    final private String clientId = "913e1b01909e741758de";
-    final private String clientSecret = "a792a015a63b50fbda7914adabf1134d52459fc4";
-    final private String secretState = "secret" + new Random().nextInt(999_999);
-    final private OAuth20Service service = new ServiceBuilder()
+    private final String clientId = "913e1b01909e741758de";
+    private final String clientSecret = "a792a015a63b50fbda7914adabf1134d52459fc4";
+    private final String secretState = "secret" + new Random().nextInt(999_999);
+    private final OAuth20Service service = new ServiceBuilder()
             .apiKey(clientId)
             .apiSecret(clientSecret)
             .state(secretState)
             .callback("http://localhost:8080/github_callback")
             .build(GitHubApi.instance());
-    final private String authorizationUrl = service.getAuthorizationUrl();
+    private final String authorizationUrl = service.getAuthorizationUrl();
 
     public String getAuthURL(){
         return authorizationUrl;

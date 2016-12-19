@@ -17,10 +17,10 @@ import java.util.Random;
 public class GoogleService {
     private static final String NETWORK_NAME = "G+";
     private static final String PROTECTED_RESOURCE_URL = "https://www.googleapis.com/plus/v1/people/me";
-    final private String clientId = "562136326887-5a5rfdv7bnostsrj2hhdpae90j9h6v73.apps.googleusercontent.com";
-    final private String clientSecret = "m5lCXFqxThSleFfGq8EkOlrv";
-    final private String secretState = "secret" + new Random().nextInt(999_999);
-    final private OAuth20Service service = new ServiceBuilder()
+    private final String clientId = "562136326887-5a5rfdv7bnostsrj2hhdpae90j9h6v73.apps.googleusercontent.com";
+    private final String clientSecret = "m5lCXFqxThSleFfGq8EkOlrv";
+    private final String secretState = "secret" + new Random().nextInt(999_999);
+    private final OAuth20Service service = new ServiceBuilder()
             .apiKey(clientId)
             .apiSecret(clientSecret)
             .scope("profile") // replace with desired scope
@@ -36,7 +36,7 @@ public class GoogleService {
                     put("prompt", "consent");
                 }
             };
-    final String authorizationUrl = service.getAuthorizationUrl(additionalParams);
+    private final String authorizationUrl = service.getAuthorizationUrl(additionalParams);
 
     public String getAuthURL(){
         return authorizationUrl;

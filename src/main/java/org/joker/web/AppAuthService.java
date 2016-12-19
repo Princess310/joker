@@ -21,6 +21,7 @@ import org.joker.dao.UserDao;
 import org.joker.entity.User;
 import org.joker.service.GithubService;
 import org.joker.service.GoogleService;
+import org.joker.service.LinkedInService;
 
 import java.io.IOException;
 
@@ -75,6 +76,9 @@ public class AppAuthService implements AuthRequest {
 	@Inject
 	GoogleService googleService;
 
+	@Inject
+	LinkedInService linkedInService;
+
 	// --------- AuthRequest Implementation --------- //
 	/**
 	 * <p>When Binding a AuthRequest implementation at the AppConfig Guice Module, all request will go
@@ -118,7 +122,6 @@ public class AppAuthService implements AuthRequest {
 			if(code != null){
 				Response response = googleService.getToken(code);
 				try {
-					System.out.println(response);
 					JSONObject  userInfo = JSONObject.fromObject(response.getBody());
 					/*String username = (String) userInfo.get("login");
 					String avatar = (String) userInfo.get("avatar_url");
@@ -129,6 +132,27 @@ public class AppAuthService implements AuthRequest {
 					}
 
 					login(username, "", rc, "1");*/
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}else if(rc.getPathInfo().equals("/linkedin_callback")){
+			String code = rc.getParam("code");
+			if(code != null){
+				Response response = linkedInService.getToken(code);
+				try {
+					JSONObject  userInfo = JSONObject.fromObject(response.getBody());
+					String firstName = (String)userInfo.get("firstName");
+					String lastName = (String)userInfo.get("lastName");
+					String username = lastName + firstName;
+					String avatar = (String) userInfo.get("pictureUrl");
+					User user = userDao.getByUsername(username);
+
+					if(user == null){
+						User createUser = userDao.createUser(username, "", avatar);
+					}
+
+					login(username, "", rc, "1");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -184,7 +208,6 @@ public class AppAuthService implements AuthRequest {
 	@WebPost("/login")
 	public WebResponse login(@WebParam("username")String username, @WebParam("pwd")String pwd, RequestContext rc,@WebParam("credentialId") String credentialId){
 		User user = userDao.getByUsername(username);
-
 		// check if user exist
 		if (user == null){
 			throw new AppException(Error.WRONG_CREDENTIAL);

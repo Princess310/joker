@@ -8,6 +8,7 @@ import com.google.inject.Singleton;
 import org.joker.perf.annotation.ToMonitor;
 import org.joker.service.GithubService;
 import org.joker.service.GoogleService;
+import org.joker.service.LinkedInService;
 
 import java.io.IOException;
 
@@ -21,6 +22,9 @@ public class AuthorizeWebHandler {
     @Inject
     GoogleService googleService;
 
+    @Inject
+    LinkedInService linkedInService;
+
     @WebGet("/authorize")
     public void authorize(@WebParam("type") String type, RequestContext rc) {
         String authUrl = null;
@@ -28,8 +32,13 @@ public class AuthorizeWebHandler {
         switch (type) {
             case "github":
                 authUrl = githubService.getAuthURL();
+                break;
             case "google":
                 authUrl = googleService.getAuthURL();
+                break;
+            case "linkedIn":
+                authUrl = linkedInService.getAuthURL();
+                break;
         }
 
         if(authUrl != null){
