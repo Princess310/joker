@@ -282,3 +282,42 @@ export const uploadFile = (file) => {
 		});
 	}
 }
+
+/**
+ * Message Actions
+ * prince 2016/12/20
+ */
+
+export const REQUEST_MESSAGE = 'REQUEST_MESSAGE';
+export const SAVE_MESSAGE = 'SAVE_MESSAGE';
+
+const receiveMessage = (messageList) => {
+	return {
+		type: REQUEST_MESSAGE,
+		message: messageList
+	}
+}
+
+const addMessage = (message) => {
+	return {
+		type: SAVE_MESSAGE,
+		message: message
+	}
+}
+
+export const fetchMessage = (id) => {
+	return dispatch => {
+		return fetch.doGet('getMessageList', {
+			blogId: id,
+		}).then(response => dispatch(receiveMessage(response.result)));
+	}
+}
+
+export const createMessage = (id, value) => {
+	return dispatch => {
+		return fetch.doPost('createMessage', {
+			blogId: id,
+			content: value
+		}).then(response => dispatch(fetchMessage(id)));
+	}
+}

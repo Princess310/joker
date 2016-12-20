@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Paper from 'material-ui/Paper';
 import IDCard from 'components/IDCard';
 import AudioBar from 'components/AudioBar';
+import Message from 'containers/Message';
 import date from 'utils/date';
 import { fetchBlogInfo } from 'actions';
 
@@ -17,7 +18,8 @@ class BlogDetail extends Component {
 	}
 
 	render() {
-		const { blog, tag } = this.props;
+		const { blog, tag, location } = this.props;
+		const id = location.query.id;
 		return (
 			<div className="blog-container">
 				<Paper className="blog-panel">
@@ -54,6 +56,7 @@ class BlogDetail extends Component {
 				<div className="action-panel">
 					<IDCard />
 					{ (blog && blog.audioFileId > 0) && <AudioBar url={ 'attachment?id=' + blog.audioFileId } autoPlay={true} /> }
+					<Message id={id} />
 				</div>
 			</div>
 		)

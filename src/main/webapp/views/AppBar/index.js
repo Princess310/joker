@@ -105,9 +105,10 @@ class AppBarMenu extends Component {
 								tooltip="Google" 
 								tooltipPosition="top-right" 
 								iconStyle={{"color": "#db463c"}}
+								disabled={true}
 								onTouchTap={this.handleAuthorizeGoogle} />
 							<IconButton 
-								iconClassName="mdi linkedin-box" 
+								iconClassName="mdi mdi-linkedin-box" 
 								tooltip="LinkedIn" 
 								tooltipPosition="top-center"
 								iconStyle={{"color": "#0077b5"}}

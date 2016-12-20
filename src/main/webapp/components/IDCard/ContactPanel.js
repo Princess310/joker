@@ -27,7 +27,7 @@ class ContactPanel extends Component {
 
 	handleRequestClose = () => {
 		this.setState({
-		  openPopup: false,
+			openPopup: false,
 		});
 	}
 

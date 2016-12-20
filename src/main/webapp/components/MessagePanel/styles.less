@@ -1,0 +1,28 @@
+@import '../../styles/mixins.less';
+
+.message-panel{
+	position: relative;
+	margin-top: 15px;
+	.message-list{
+		max-height: 304px;
+		border-bottom: 1px @black-10 solid;
+		.scroll-y();
+	}
+	.message-actions{
+		padding: 0 15px 15px 15px;
+		.emoji-container{
+			width: 100%;
+			padding: 6px;
+			border: 1px rgba(0, 0, 0, 0.298039) solid;
+			.border-radius(8px);
+			span:hover{
+				cursor: pointer;
+			}
+		}
+		.action-wrapper{
+			display: flex;
+			justify-content: flex-end;
+			margin-top: 7px;
+		}
+	}
+}
