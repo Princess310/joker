@@ -35,7 +35,8 @@ class MessagePanel extends Component {
 					});
 				}
 			},
-			value: ""
+			value: "",
+			messageId: 0
 		};
 	}
 
@@ -51,38 +52,84 @@ class MessagePanel extends Component {
 	}
 
 	handleSubmit = () => {
-		let value = this.state.value;
+		const {value, messageId} = this.state;
 		const self = this;
 		const { id, dispatch } = this.props;
 
-		dispatch(createMessage(id, value)).then(() => {
+		dispatch(createMessage(id, value, messageId)).then(() => {
 			self.setState({
 				value: ""
 			});
 		});
 	}
 
+	handleReply(id) {
+		this.setState({
+			messageId: id
+		});
+	}
+
+	handleDeleteReply = () => {
+		this.setState({
+			messageId: 0
+		});
+	}
+
 	render() {
 		const { message } = this.props;
+		let replyUser = "";
 
 		let messageList = message.map((m, index) => {
 			let avatar = "images/joker.jpg";
+			let username = m.username ? m.username : ("visitor");
+			let children;
 
 			if(m.avatar){
 				avatar = m.avatar;
 			}
 
+			if(this.state.messageId !== "" && m.id == this.state.messageId){
+				replyUser = "@" + username;
+			}
+
+			if(m.children && m.children.length > 0){
+				children = m.children.map((c, i) => {
+					let cAvatar = "images/joker.jpg";
+					let cUsername = c.username ? c.username : ("visitor");
+
+					if(c.avatar){
+						cAvatar = c.avatar;
+					}
+					
+					return (
+						<ListItem
+							leftAvatar={<Avatar src={cAvatar} backgroundColor={"#f0f0f0"}/>}
+							primaryText={cUsername}
+							secondaryText={
+								<p>
+									{emojify(c.content, this.state.options)}
+								</p>
+							}
+							secondaryTextLines={2}
+							key={ i }
+						/>
+					);
+				});
+			}
+
 			return (
 				<ListItem
 					leftAvatar={<Avatar src={avatar} backgroundColor={"#f0f0f0"}/>}
-					primaryText={m.username ? m.username : ("visitor")}
+					primaryText={username}
 					secondaryText={
 						<p>
 							{emojify(m.content, this.state.options)}
 						</p>
 					}
-				  secondaryTextLines={2}
-				  key={ index }
+					secondaryTextLines={2}
+					key={ index }
+					nestedItems={children}
+					onTouchTap={(e) => this.handleReply(m.id)}
 				/>
 			);
 		});
@@ -111,6 +158,8 @@ class MessagePanel extends Component {
 							+ "xD X'D </3 <3 <\\3", this.state.options)}
 					</div>
 					<div className="action-wrapper">
+						<div className="reply-user">{replyUser}</div>
+						{replyUser !== "" && <i className="mdi mdi-close-circle-outline remove-user" onTouchTap={this.handleDeleteReply}></i>}
 						<RaisedButton label="Send" primary={true} onTouchTap={this.handleSubmit}/>
 					</div>
 				</div>

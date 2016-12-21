@@ -313,11 +313,12 @@ export const fetchMessage = (id) => {
 	}
 }
 
-export const createMessage = (id, value) => {
+export const createMessage = (id, value, messageId) => {
 	return dispatch => {
 		return fetch.doPost('createMessage', {
 			blogId: id,
-			content: value
+			content: value,
+			messageId: messageId
 		}).then(response => dispatch(fetchMessage(id)));
 	}
 }

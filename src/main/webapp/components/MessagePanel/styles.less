@@ -21,8 +21,20 @@
 		}
 		.action-wrapper{
 			display: flex;
-			justify-content: flex-end;
+			align-items: center;
+			justify-content: space-between;
 			margin-top: 7px;
+			.reply-user{
+				position: relative;
+				color: @color-txt-lighter;
+				.ellipsis();
+			}
+			.remove-user{
+				color: @color-theme-red;
+				&:hover{
+					cursor: pointer;
+				}
+			}
 		}
 	}
 }

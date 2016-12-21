@@ -24,8 +24,8 @@ public class MessageWebHandler {
     private WebResponseBuilder webResponseBuilder;
 
     @WebPost("/createMessage")
-    public WebResponse createMessage(@WebUser User user, @WebParam("blogId") Long blogId, @WebParam("content") String content){
-        Message message = messageDao.createMessage(user, blogId, content);
+    public WebResponse createMessage(@WebUser User user, @WebParam("blogId") Long blogId, @WebParam("content") String content,  @WebParam("messageId") Long messageId){
+        Message message = messageDao.createMessage(user, blogId, content, messageId);
 
         return webResponseBuilder.success(message);
     }
@@ -33,6 +33,15 @@ public class MessageWebHandler {
     @WebGet("/getMessageList")
     public WebResponse getMessageList(@WebUser User user, @WebParam("blogId") Long blogId){
         List<Record> result = messageDao.getMessageList(user, blogId, 0, 100);
+
+        for(Record r: result){
+            Long id = (Long)r.get("id");
+            List<Record> children = messageDao.getMessageListByMessage(user, id, 0, 100);
+
+            if(children.size() > 0){
+                r.put("children", children);
+            }
+        }
 
         return webResponseBuilder.success(result);
     }

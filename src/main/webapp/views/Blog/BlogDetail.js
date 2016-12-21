@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Paper from 'material-ui/Paper';
+import Slider from 'material-ui/Slider';
 import IDCard from 'components/IDCard';
 import AudioBar from 'components/AudioBar';
 import Message from 'containers/Message';
@@ -9,6 +10,11 @@ import { fetchBlogInfo } from 'actions';
 class BlogDetail extends Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			blogWidth: 800,
+			actionWidth: 280,
+			totalWidth: 1080
+		}
 	}
 
 	componentDidMount() {
@@ -17,12 +23,25 @@ class BlogDetail extends Component {
 		query.id && dispatch(fetchBlogInfo(query.id));
 	}
 
+	handleControlView = (event, value) => {
+		if(value && !isNaN(value)){
+			let newBlogWidth = value * this.state.totalWidth;
+			let newActionWidth = this.state.totalWidth - newBlogWidth;
+
+			this.setState({
+				blogWidth: newBlogWidth,
+				actionWidth: newActionWidth
+			});
+		}
+	}
+
 	render() {
 		const { blog, tag, location } = this.props;
 		const id = location.query.id;
+
 		return (
 			<div className="blog-container">
-				<Paper className="blog-panel">
+				<Paper className="blog-panel" style={{ width: this.state.blogWidth }}>
 					{ blog && (
 						<div className="blog-detail">
 							<Paper className="header-wrapepr">
@@ -53,10 +72,11 @@ class BlogDetail extends Component {
 						</div>
 					) }
 				</Paper>
-				<div className="action-panel">
+				<div className="action-panel" style={{ width: this.state.actionWidth }}>
 					<IDCard />
 					{ (blog && blog.audioFileId > 0) && <AudioBar url={ 'attachment?id=' + blog.audioFileId } autoPlay={true} /> }
 					<Message id={id} />
+					<Slider defaultValue={this.state.blogWidth / this.state.totalWidth} max={0.8} min={0.4} onChange={this.handleControlView}/>
 				</div>
 			</div>
 		)
