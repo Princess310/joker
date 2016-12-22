@@ -63,17 +63,19 @@ class BlogList extends Component {
 		)
 
 		return (
-			<div className="blog-container">
-				<Paper className="blog-panel">
-					<SearchBar onSearch={ this.handleSearch }/>
-					<div className="list">
-						{blogList.length > 0 ? blogList : blankList}
+			<div className="pos-fit">
+				<div className="blog-container">
+					<Paper className="blog-panel">
+						<SearchBar onSearch={ this.handleSearch }/>
+						<div className="list">
+							{blogList.length > 0 ? blogList : blankList}
+						</div>
+					</Paper>
+					<div className="action-panel">
+						<IDCard />
+						<ContactPanel />
+						<TagsPanel onSelectItem={this.handleSearchByTag}/>
 					</div>
-				</Paper>
-				<div className="action-panel">
-					<IDCard />
-					<ContactPanel />
-					<TagsPanel onSelectItem={this.handleSearchByTag}/>
 				</div>
 			</div>
 		)
