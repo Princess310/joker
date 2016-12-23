@@ -12,34 +12,38 @@ class Clock extends Component {
 			HAND_TRUNCATION: 64/25,
 			HOUR_HAND_TRUNCATION: 64/10,
 			RADIUS: 24,
-			HNAD_RADIUS: 18
+			HNAD_RADIUS: 18,
+			context: null
 		};
 	}
 
 	componentDidMount() {
-		const width = this.canvas.width;
-		const height = this.canvas.height;
-
-		this.context = this.canvas.getContext("2d");
-		this.context.fillStyle = "#fff";
-		this.context.strokeStyle = "#fff";
-		this.context.font = this.state.FONT_HEIGHT + "px Arial";
+		this.state.context = this.canvas.getContext("2d");
+		this.state.context.fillStyle = "#fff";
+		this.state.context.strokeStyle = "#fff";
+		this.state.context.font = this.state.FONT_HEIGHT + "px Arial";
 
 		this.drawClock();
 	}
 
-	drawCircle() {
-		this.context.beginPath();
+	componentWillUpdate() {
+		clearInterval(this.timer);
+		
+		this.drawClock();
+	}
 
-		this.context.arc(this.canvas.width/2, this.canvas.height/2,
+	drawCircle() {
+		this.state.context.beginPath();
+
+		this.state.context.arc(this.canvas.width/2, this.canvas.height/2,
 					this.state.RADIUS, 0, Math.PI*2, true);
-		this.context.stroke();
+		this.state.context.stroke();
 	}
 
 	drawCenter() {
-		this.context.beginPath();
-		this.context.arc(this.canvas.width/2, this.canvas.height/2, 2, 0, Math.PI*2, true);
-		this.context.fill();
+		this.state.context.beginPath();
+		this.state.context.arc(this.canvas.width/2, this.canvas.height/2, 2, 0, Math.PI*2, true);
+		this.state.context.fill();
 	}
 
 	drawNumberals() {
@@ -52,8 +56,8 @@ class Clock extends Component {
 		numerals.forEach(function(numberal){
 			if(numberal % 3 === 0){
 				angle = Math.PI/6 * (numberal - 3);
-				numberalWidth = self.context.measureText(numberal).width;
-				self.context.fillText(numberal,
+				numberalWidth = self.state.context.measureText(numberal).width;
+				self.state.context.fillText(numberal,
 					self.canvas.width/2 + Math.cos(angle) * (self.state.HNAD_RADIUS) - numberalWidth/2,
 					self.canvas.height/2 + Math.sin(angle) * (self.state.HNAD_RADIUS + self.state.FONT_HEIGHT/3) + 4);
 			}
@@ -65,10 +69,10 @@ class Clock extends Component {
 			handleRadius = isHour ? this.state.RADIUS - this.state.HAND_TRUNCATION - this.state.HOUR_HAND_TRUNCATION
 								: this.state.RADIUS - this.state.HAND_TRUNCATION;
 
-		this.context.moveTo(this.canvas.width/2, this.canvas.height/2);
-		this.context.lineTo(this.canvas.width/2 + Math.cos(angle)*handleRadius, 
+		this.state.context.moveTo(this.canvas.width/2, this.canvas.height/2);
+		this.state.context.lineTo(this.canvas.width/2 + Math.cos(angle)*handleRadius, 
 						this.canvas.height/2 + Math.sin(angle)*handleRadius);
-		this.context.stroke();
+		this.state.context.stroke();
 	}
 
 	drawHands() {
@@ -84,8 +88,9 @@ class Clock extends Component {
 
 	drawClock() {
 		const self = this;
+
 		this.timer = setInterval(() => {
-			self.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+			self.state.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 			//self.drawCircle();
 			self.drawCenter();
 			self.drawHands();
