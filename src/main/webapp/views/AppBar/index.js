@@ -28,7 +28,7 @@ class Menu extends Component {
 				anchorOrigin={{horizontal: 'right', vertical: 'top'}}
 			>
 				<MenuItem primaryText="Index" onClick={(e) => history.push("/")}/>
-				<MenuItem primaryText="About" onClick={(e) => history.push("/about")}/>
+				<MenuItem primaryText="Blog" onClick={(e) => history.push("/app/blog")}/>
 			</IconMenu>
 		);
 	}
