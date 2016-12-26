@@ -5,6 +5,9 @@ import IDCard from 'components/IDCard';
 import ContactPanel from 'components/IDCard/ContactPanel.js';
 import TagsPanel from 'containers/TagsPanel';
 import BlogCard from './BlogCard.js';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import { WindowResizeListener } from 'react-window-resize-listener';
 import { fetchBlogs, fetchTags } from 'actions';
 import styles from './styles.less';
 
@@ -13,7 +16,9 @@ class BlogList extends Component {
 		super(props);
 		this.state = {
 			keyword: "",
-			tagId: 0
+			tagId: 0,
+			showFloatBtn: false,
+			showAction: false
 		}
 	}
 
@@ -45,6 +50,12 @@ class BlogList extends Component {
 		dispatch(fetchBlogs(keyword, tagId));
 	}
 
+	handleToggleAction = () => {
+		this.setState({
+			showAction: !this.state.showAction
+		});
+	}
+
 	render() {
 		const { blogs } = this.props;
 
@@ -64,7 +75,7 @@ class BlogList extends Component {
 
 		return (
 			<div className="pos-fit">
-				<div className="blog-container">
+				<div className={this.state.showAction ? "blog-container show-action" : "blog-container"}>
 					<Paper className="blog-panel">
 						<SearchBar onSearch={ this.handleSearch }/>
 						<div className="list">
@@ -76,6 +87,22 @@ class BlogList extends Component {
 						<ContactPanel />
 						<TagsPanel onSelectItem={this.handleSearchByTag}/>
 					</div>
+					{ this.state.showFloatBtn &&
+						<FloatingActionButton className="blog-fl-btn" onTouchTap={this.handleToggleAction}>
+							<ContentAdd />
+						</FloatingActionButton>
+					}
+					<WindowResizeListener onResize={windowSize => {
+						if(windowSize.windowWidth <= 1080){
+							this.setState({
+								showFloatBtn: true
+							});
+						}else {
+							this.setState({
+								showFloatBtn: false
+							});
+						}
+					}}/>
 				</div>
 			</div>
 		)

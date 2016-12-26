@@ -58,8 +58,8 @@ class ContactPanel extends Component {
 					<Popover
 						open={this.state.openPopup}
 						anchorEl={this.state.anchorEl}
-						anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-						targetOrigin={{horizontal: 'left', vertical: 'top'}}
+						anchorOrigin={{horizontal: 'middle', vertical: 'top'}}
+						targetOrigin={{horizontal: 'middle', vertical: 'top'}}
 						onRequestClose={this.handleRequestClose}
 						className="qrcode-wrapper"
 					>

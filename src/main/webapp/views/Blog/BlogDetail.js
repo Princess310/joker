@@ -4,6 +4,9 @@ import Slider from 'material-ui/Slider';
 import IDCard from 'components/IDCard';
 import AudioBar from 'components/AudioBar';
 import Message from 'containers/Message';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import { WindowResizeListener } from 'react-window-resize-listener';
 import date from 'utils/date';
 import { fetchBlogInfo } from 'actions';
 
@@ -13,7 +16,9 @@ class BlogDetail extends Component {
 		this.state = {
 			blogWidth: 800,
 			actionWidth: 280,
-			totalWidth: 1080
+			totalWidth: 1080,
+			showFloatBtn: false,
+			showAction: false
 		}
 	}
 
@@ -35,12 +40,18 @@ class BlogDetail extends Component {
 		}
 	}
 
+	handleToggleAction = () => {
+		this.setState({
+			showAction: !this.state.showAction
+		});
+	}
+
 	render() {
 		const { blog, tag, location } = this.props;
 		const id = location.query.id;
 
 		return (
-			<div className="blog-container">
+			<div className={this.state.showAction ? "blog-container show-action" : "blog-container"}>
 				<Paper className="blog-panel" style={{ width: this.state.blogWidth }}>
 					{ blog && (
 						<div className="blog-detail">
@@ -78,6 +89,23 @@ class BlogDetail extends Component {
 					<Message id={id} />
 					<Slider defaultValue={this.state.blogWidth / this.state.totalWidth} max={0.8} min={0.4} onChange={this.handleControlView}/>
 				</div>
+
+				{ this.state.showFloatBtn &&
+						<FloatingActionButton className="blog-fl-btn" onTouchTap={this.handleToggleAction}>
+							<ContentAdd />
+						</FloatingActionButton>
+					}
+					<WindowResizeListener onResize={windowSize => {
+						if(windowSize.windowWidth <= 1080){
+							this.setState({
+								showFloatBtn: true
+							});
+						}else {
+							this.setState({
+								showFloatBtn: false
+							});
+						}
+					}}/>
 			</div>
 		)
 	}

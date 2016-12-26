@@ -110,6 +110,12 @@
 	.tags-panel{
 		margin-top: 15px;
 	}
+	.blog-fl-btn{
+		position: absolute;
+		bottom: 8px;
+		right: 8px;
+		z-index: 20;
+	}
 }
 
 .dialog{
@@ -151,18 +157,30 @@
 		.blog-panel{
 			left: 8px;
 			right: 8px;
-			width: auto;
+			width: auto !important;
 		}
 		.action-panel{
 			display: none;
 			left: 0;
-			width: auto;
+			width: auto !important;
 			&:before{
 				content: "";
 				background-color: @black-deep;
 				opacity: .5;
-				.fitparent();
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
 				z-index: 1;
+			}
+		}
+		&.show-action{
+			.action-panel{
+				display: block;
+			}
+			.blog-fl-btn{
+				.transform(rotate(135deg));
 			}
 		}
 	}
