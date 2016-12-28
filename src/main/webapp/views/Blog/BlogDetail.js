@@ -77,7 +77,7 @@ class BlogDetail extends Component {
 								<img src={ 'attachment?id=' + blog.picFileId } className="blog-pic" />
 								<section className="content">
 									<article className="breif">{blog.breif}</article>
-									<article dangerouslySetInnerHTML={{__html: blog.content}}></article>
+									<article className="article" dangerouslySetInnerHTML={{__html: blog.content}}></article>
 								</section>
 							</Paper>
 						</div>
