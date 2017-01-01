@@ -51,7 +51,7 @@ public class BlogDao extends BaseDao<Blog,Long> {
         }
 
         sql.append(condition);
-        sql.append(" offset ? limit ?");
+        sql.append(" order by id desc offset ? limit ?");
         params.add(page * pageSize);
         params.add(pageSize);
 
