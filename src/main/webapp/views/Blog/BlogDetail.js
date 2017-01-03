@@ -61,7 +61,7 @@ class BlogDetail extends Component {
 								</header>
 								<section className="subinfo">
 									<div className="time">
-										{date.formatDateObj(blog.utime)}
+										{date.formatDateObj(blog.ctime)}
 									</div>
 									<div className="tag">
 										<span className="mdi mdi-tag-heart" style={{ "color": tag.color }}></span>
