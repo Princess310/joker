@@ -59,11 +59,11 @@ class BlogList extends Component {
 	render() {
 		const { blogs } = this.props;
 
-		let blogList = blogs.map((blog) => {
+		let blogList = blogs.map((blog, index) => {
 			let pic = "";
 			if(blog.picFileId){ pic =  "attachment?id=" + blog.picFileId};
 			return (
-				<BlogCard key={blog.id} id={blog.id} title={blog.title} pic={pic} breif={blog.breif} />
+				<BlogCard key={index} id={blog.id} title={blog.title} pic={pic} breif={blog.breif} tagName={blog.tagName} tagColor={blog.tagColor} />
 			)
 		});
 

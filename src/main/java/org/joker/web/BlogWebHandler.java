@@ -8,6 +8,7 @@ import com.britesnow.snow.web.rest.annotation.WebPost;
 import com.britesnow.snow.web.rest.annotation.WebPut;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.j8ql.Record;
 import org.joker.dao.BlogDao;
 import org.joker.dao.TagDao;
 import org.joker.entity.Blog;
@@ -33,7 +34,7 @@ public class BlogWebHandler {
 
     @WebGet("/getBlogList")
     public WebResponse getBlogList(@WebUser User user, @WebParam("keyword") String keyword, @WebParam("tagId") Long tagId){
-        List<Blog> blogs = blogDao.getBlogList(user, keyword, tagId, 0,100);
+        List<Record> blogs = blogDao.getBlogList(user, keyword, tagId, 0,100);
 
         return webResponseBuilder.success(blogs);
     }

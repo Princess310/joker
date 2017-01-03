@@ -20,12 +20,15 @@ public class BlogDao extends BaseDao<Blog,Long> {
     @Inject
     private BlogTagDao blogTagDao;
 
-    public List<Blog> getBlogList (User user, String keyword, Long tagId, int page, int pageSize, String... orderBy){
+    public List<Record> getBlogList (User user, String keyword, Long tagId, int page, int pageSize, String... orderBy){
         StringBuilder sql = new StringBuilder();
         List params = new ArrayList();
         String condition = "";
 
-        sql.append("select blog.* from blog");
+        sql.append("select blog.*,tag.name as \"tagName\", tag.color as \"tagColor\" from (" +
+                "select b.*,bt.\"tagId\" from blog b " +
+                "left join blogtag bt on b.id = bt.\"blogId\") blog " +
+                "left join tag on blog.\"tagId\" = tag.id");
 
         if(!keyword.trim().equals("")){
             condition += " where blog.title like ?";
@@ -56,7 +59,7 @@ public class BlogDao extends BaseDao<Blog,Long> {
         params.add(pageSize);
 
         try (Runner runner = daoHelper.openRunner()) {
-            return runner.list(Blog.class, sql.toString(), params.toArray());
+            return runner.list(Record.class, sql.toString(), params.toArray());
         }
     }
 

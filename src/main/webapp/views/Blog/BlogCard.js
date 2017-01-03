@@ -9,7 +9,7 @@ class BlogCard extends Component {
 	}
 
 	render() {
-		const { id, title, pic, breif } = this.props;
+		const { id, title, pic, breif, tagName, tagColor } = this.props;
 
 		return (
 			<Link to={{ pathname: "/app/blogDetail", query: { id: id } }}>
@@ -20,6 +20,9 @@ class BlogCard extends Component {
 						</CardMedia>
 					)}
 					<CardTitle title={title} subtitle={breif} />
+					<div className="tag" style={{"color": tagColor}}>
+						<span className="mdi mdi-tag-heart" style={{"color": tagColor}}></span>{tagName}
+					</div>
 				</Card>
 			</Link>
 		)
