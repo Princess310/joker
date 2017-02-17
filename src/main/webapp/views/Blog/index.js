@@ -36,7 +36,7 @@ class Blog extends Component {
 
 	componentDidMount() {
 		const { dispatch } = this.props;
-		dispatch(fetchBlogs());
+		dispatch(fetchBlogs('', 0, 0, 100));
 		dispatch(fetchTags()).then((result) => {
 			const tags = result.tags;
 			if(tags.length > 0){
@@ -93,14 +93,14 @@ class Blog extends Component {
 		let ids = [];
 
 		if(data === "all"){
-			blogs.map(blog => {
+			blogs.list.map(blog => {
 				ids.push(blog.id);
 			});
 		}else if(data === "none"){
 			ids = [];
 		}else {
 			data.map((index) => {
-				ids.push(blogs[index].id);
+				ids.push(blogs.list[index].id);
 			});
 		}
 		
@@ -126,7 +126,7 @@ class Blog extends Component {
 		e.preventDefault();
 		const { blogs } = this.props;
 		const tr = e.target.parentElement;
-		const blog = blogs[tr.dataset.index];
+		const blog = blogs.list[tr.dataset.index];
 
 		this.setState({
 			id: blog.id,
@@ -197,7 +197,7 @@ class Blog extends Component {
 		const { keyword } = this.state;
 		const { dispatch } = this.props;
 
-		dispatch(fetchBlogs(keyword))
+		dispatch(fetchBlogs(keyword, 0, 0, 100))
 	}
 
 	handleChangeImage = (e) => {
@@ -253,7 +253,8 @@ class Blog extends Component {
 	render() {
 		const { blogs, tags } = this.props;
 
-		const tableRows = blogs.map((blog, index) => {
+		const tableRows = blogs.list.map((blog, index) => {
+			console.log(blog.id);
 			return (
 				<TableRow key={blog.id} data-index={index}>
 					<TableRowColumn>{blog.id}</TableRowColumn>

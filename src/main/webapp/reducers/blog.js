@@ -3,26 +3,54 @@ import {
   ADD_BLOG, DELETE_BLOGS, UPDATE_BLOG
 } from 'actions';
 
-const blog = (state = [], action) => {
+let initState = {
+	list: [],
+	page: 0,
+	totalItems: 0,
+	totalPages: 0
+}
+
+const blog = (state = initState, action) => {
 	switch (action.type) {
 		case REQUEST_BLOGS:
-			return action.blogs || []
-		case RECEIVE_BLOGS:
-			return action.blogs || []
-		case ADD_BLOG:
-			return [
+			return {
 				...state,
-				action.blog
-			]
+				...action.blogs
+			};
+		case RECEIVE_BLOGS:
+			let list = state.list;
+
+			if(action.blogs.page === 0){
+				list = action.blogs.list
+			}else {
+				list = state.list.concat(action.blogs.list);
+			}
+
+			return {
+				...state,
+				...action.blogs,
+				list: list
+			};
+		case ADD_BLOG:
+			return {
+				...state,
+				list: [
+					...state.list,
+					action.blog
+				]
+			}
 		case DELETE_BLOGS:
-			const blogs = state.filter(blog => {
+			const blogs = state.list.filter(blog => {
 				return (action.ids.indexOf(blog.id) < 0);
 			});
-			return blogs;
+			return {
+				...state,
+				list: blogs
+			};
 		case UPDATE_BLOG:
-			state.map((blog, index) => {
+			state.list.map((blog, index) => {
 				if(blog.id === action.blog.id){
-					state[index] = action.blog;
+					state.list[index] = action.blog;
 				};
 			});
 			return state;

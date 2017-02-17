@@ -25,7 +25,8 @@ public class BlogDao extends BaseDao<Blog,Long> {
         List params = new ArrayList();
         String condition = "";
 
-        sql.append("select blog.*,tag.name as \"tagName\", tag.color as \"tagColor\" from (" +
+        sql.append("select blog.id, blog.title, blog.breif, blog.\"picFileId\", blog.\"viewCount\"" +
+                ",tag.name as \"tagName\", tag.color as \"tagColor\" from (" +
                 "select b.*,bt.\"tagId\" from blog b " +
                 "left join blogtag bt on b.id = bt.\"blogId\") blog " +
                 "left join tag on blog.\"tagId\" = tag.id");

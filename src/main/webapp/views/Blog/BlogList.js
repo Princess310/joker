@@ -8,6 +8,7 @@ import BlogCard from './BlogCard.js';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { WindowResizeListener } from 'react-window-resize-listener';
+import InfiniteScroll from 'react-infinite-scroller'
 import { fetchBlogs, fetchTags } from 'actions';
 import styles from './styles.less';
 
@@ -18,36 +19,56 @@ class BlogList extends Component {
 			keyword: "",
 			tagId: 0,
 			showFloatBtn: false,
-			showAction: false
+			showAction: false,
+			pageStart: 0,
+			page: 0,
+			hasNextPage: false
 		}
 	}
 
 	componentDidMount() {
 		const { dispatch } = this.props;
-		dispatch(fetchBlogs())
+		const self = this;
+
+		dispatch(fetchBlogs()).then((res) => {
+			self.updatePageInfo(res.blogs);
+		});
 		dispatch(fetchTags())
+	}
+
+	updatePageInfo(blogs) {
+		this.setState({
+			hasNextPage: blogs.page < blogs.totalPages
+		});
 	}
 
 	handleSearch = (keyword) => {
 		const { dispatch } = this.props;
-		const { tagId } = this.state;
+		const { tagId, pageStart } = this.state;
 
 		this.setState({
 			keyword: keyword
 		});
 
-		dispatch(fetchBlogs(keyword, tagId));
+		dispatch(fetchBlogs(keyword, tagId, pageStart));
 	}
 
 	handleSearchByTag = (tagId) => {
 		const { dispatch } = this.props;
-		const { keyword } = this.state;
+		const { keyword, pageStart } = this.state;
 
 		this.setState({
 			tagId: tagId
 		});
 
-		dispatch(fetchBlogs(keyword, tagId));
+		dispatch(fetchBlogs(keyword, tagId, pageStart));
+	}
+
+	handleScroll = () => {
+		const { dispatch } = this.props;
+		const { tagId, keyword, page } = this.state;
+
+		dispatch(fetchBlogs(keyword, tagId, page + 1));
 	}
 
 	handleToggleAction = () => {
@@ -59,7 +80,7 @@ class BlogList extends Component {
 	render() {
 		const { blogs } = this.props;
 
-		let blogList = blogs.map((blog, index) => {
+		let blogList = blogs.list.map((blog, index) => {
 			let pic = "";
 			if(blog.picFileId){ pic =  "attachment?id=" + blog.picFileId};
 			return (
@@ -79,7 +100,17 @@ class BlogList extends Component {
 					<Paper className="blog-panel">
 						<SearchBar onSearch={ this.handleSearch }/>
 						<div className="list">
-							{blogList.length > 0 ? blogList : blankList}
+							<InfiniteScroll
+								pageStart={this.state.pageStart}
+								loadMore={() => {
+									//this.handleScroll()
+								}}
+								hasMore={this.state.hasNextPage}
+								useWindow={false}
+								loader={<div className="loader">Loading ...</div>}
+							>
+								{blogList.length > 0 ? blogList : blankList}
+							</InfiniteScroll>
 						</div>
 					</Paper>
 					<div className="action-panel">

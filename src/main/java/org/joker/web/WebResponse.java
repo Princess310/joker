@@ -2,6 +2,7 @@ package org.joker.web;
 
 import org.joker.AppException;
 
+import java.util.List;
 import java.util.Map;
 
 public class WebResponse {
@@ -66,4 +67,33 @@ public class WebResponse {
 	// --------- /Accessors --------- //
 
 
+	public static class ListResult{
+		private List list;
+		private Integer page;
+		private Integer totalPages;
+		private Integer totalItems;
+
+		public ListResult(List list, Integer page, Integer totalPages, Integer totalItems) {
+			this.list = list;
+			this.page = page;
+			this.totalPages = totalPages;
+			this.totalItems = totalItems;
+		}
+
+		public List getList() {
+			return list;
+		}
+
+		public Integer getPage() {
+			return page;
+		}
+
+		public Integer getTotalPages() {
+			return totalPages;
+		}
+
+		public Integer getTotalItems() {
+			return totalItems;
+		}
+	}
 }

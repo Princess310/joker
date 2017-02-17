@@ -134,14 +134,17 @@ const alterBlog = (blog) => {
 	}
 }
 
-export const fetchBlogs = (keyword, tagId) => {
+export const fetchBlogs = (keyword, tagId, page, pageSize) => {
 	if (typeof keyword === "undefined") { keyword = "" }
 	if (typeof tagId === "undefined") { tagId = 0 }
+	if (typeof page === "undefined") { page = 0 }
 	return dispatch => {
 		dispatch(requestBlogs())
 		return fetch.doGet('getBlogList', {
 			keyword: keyword,
-			tagId: tagId
+			tagId: tagId,
+			page: page,
+			pageSize: pageSize || 10
 		}).then(response => dispatch(receiveBlogs(response.result)))
 	}
 }
