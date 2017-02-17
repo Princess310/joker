@@ -74,7 +74,7 @@ class BlogDetail extends Component {
 								</section>
 							</Paper>
 							<Paper className="content-wrapper">
-								<img src={ 'attachment?id=' + blog.picFileId } className="blog-pic" />
+								{ blog.picFileId > 0 && <img src={ 'attachment?id=' + blog.picFileId } className="blog-pic" /> }
 								<section className="content">
 									<article className="breif">{blog.breif}</article>
 									<article className="article" dangerouslySetInnerHTML={{__html: blog.content}}></article>

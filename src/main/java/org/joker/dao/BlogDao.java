@@ -66,6 +66,7 @@ public class BlogDao extends BaseDao<Blog,Long> {
 
     public Blog createBlog(User user, String title, String breif, Long tagId, Long picFileId, Long audioFileId, String content){
         Blog blog = new Blog(title, breif, content, user.getId(), picFileId, audioFileId, LocalDateTime.now(), LocalDateTime.now());
+        blog.setViewCount(1L);
         Long id = create(null, blog);
 
         // BlogTag
