@@ -29,11 +29,11 @@ class BlogList extends Component {
 	componentDidMount() {
 		const { dispatch } = this.props;
 
-		this.loadList({});
+		this.loadList();
 		dispatch(fetchTags())
 	}
 
-	loadList({keyword, tagId, page}) {
+	loadList({keyword, tagId, page} = {}) {
 		const { dispatch } = this.props;
 		const self = this;
 

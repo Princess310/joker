@@ -35,7 +35,7 @@ public class BlogWebHandler {
     @WebGet("/getBlogList")
     public WebResponse getBlogList(@WebUser User user, @WebParam("keyword") String keyword, @WebParam("tagId") Long tagId, @WebParam("page") Integer page, @WebParam("pageSize") Integer pageSize){
         List<Record> blogs = blogDao.getBlogList(user, keyword, tagId, page, pageSize);
-        List<Record> bc = blogDao.getBlogList(user, "", 0L, page, 1000);
+        List<Record> bc = blogDao.getBlogList(user, "", 0L, 0, 1000);
 
         return webResponseBuilder.success(new WebResponse.ListResult(blogs, page, (int) Math.ceil(bc.size() / pageSize), bc.size()));
     }
