@@ -28,17 +28,22 @@ class BlogList extends Component {
 
 	componentDidMount() {
 		const { dispatch } = this.props;
-		const self = this;
 
-		dispatch(fetchBlogs()).then((res) => {
-			self.updatePageInfo(res.blogs);
-		});
+		this.loadList({});
 		dispatch(fetchTags())
 	}
 
-	updatePageInfo(blogs) {
-		this.setState({
-			hasNextPage: blogs.page < blogs.totalPages
+	loadList({keyword, tagId, page}) {
+		const { dispatch } = this.props;
+		const self = this;
+
+		dispatch(fetchBlogs(keyword, tagId, page)).then((res) => {
+			const blogs = res.blogs;
+
+			self.setState({
+				page: page || 0,
+				hasNextPage: blogs.page < blogs.totalPages
+			});
 		});
 	}
 
@@ -50,7 +55,13 @@ class BlogList extends Component {
 			keyword: keyword
 		});
 
-		dispatch(fetchBlogs(keyword, tagId, pageStart));
+		this.loadList({
+			keyword: keyword,
+			tagId: tagId,
+			page: pageStart
+		});
+
+		// dispatch(fetchBlogs(keyword, tagId, pageStart));
 	}
 
 	handleSearchByTag = (tagId) => {
@@ -61,14 +72,28 @@ class BlogList extends Component {
 			tagId: tagId
 		});
 
-		dispatch(fetchBlogs(keyword, tagId, pageStart));
+		this.loadList({
+			keyword: keyword,
+			tagId: tagId,
+			page: pageStart
+		});
 	}
 
 	handleScroll = () => {
 		const { dispatch } = this.props;
-		const { tagId, keyword, page } = this.state;
+		const { tagId, keyword, page, hasNextPage } = this.state;
 
-		dispatch(fetchBlogs(keyword, tagId, page + 1));
+		if(hasNextPage){
+			this.setState({
+				hasNextPage: false
+			});
+
+			this.loadList({
+				keyword: keyword,
+				tagId: tagId,
+				page: page + 1
+			});
+		}
 	}
 
 	handleToggleAction = () => {
@@ -103,7 +128,7 @@ class BlogList extends Component {
 							<InfiniteScroll
 								pageStart={this.state.pageStart}
 								loadMore={() => {
-									//this.handleScroll()
+									this.handleScroll()
 								}}
 								hasMore={this.state.hasNextPage}
 								useWindow={false}
