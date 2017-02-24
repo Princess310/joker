@@ -254,7 +254,6 @@ class Blog extends Component {
 		const { blogs, tags } = this.props;
 
 		const tableRows = blogs.list.map((blog, index) => {
-			console.log(blog.id);
 			return (
 				<TableRow key={blog.id} data-index={index}>
 					<TableRowColumn>{blog.id}</TableRowColumn>
