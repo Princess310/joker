@@ -8,14 +8,21 @@ import createLogger from 'redux-logger';
 import { createStore, applyMiddleware } from 'redux';
 import jokerApp from './reducers';
 
+const NODE_ENV = process.env.NODE_ENV;
 const loggerMiddleware = createLogger();
+
+const middlewares = [
+	thunkMiddleware,
+];
+
+// when in dev env, add the logger
+if (NODE_ENV === 'development') {
+	middlewares.push(loggerMiddleware);
+}
 
 let store = createStore(
 	jokerApp,
-	applyMiddleware(
-		thunkMiddleware,
-		loggerMiddleware
-	)
+	applyMiddleware(...middlewares)
 );
 
 const root = (

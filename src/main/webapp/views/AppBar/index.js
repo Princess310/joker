@@ -11,7 +11,6 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import Drawer from 'material-ui/Drawer';
 import Avatar from 'material-ui/Avatar';
-import Clock from 'components/Clock';
 import styles from './styles.less';
 
 class Menu extends Component {
@@ -75,7 +74,6 @@ class AppBarMenu extends Component {
 		let avatar = "images/joker.jpg";
 		let title = (<div className="app-title">
 						<div>Joker</div>
-						<Clock />
 					</div>);
 
 		const user = this.context.user;
